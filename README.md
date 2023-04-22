@@ -35,26 +35,9 @@ Contributed by George Tiley.
 Contributed by Joe Bielawski.
     
     PamlLab.zip
-
-{% comment %}    
-## Used in the PhyloNetworks lab
-
-Contributed by Sagi Snir.
-    
-    QMCN.tar.gz
-{% endcomment %}    
     
 ## Used in the RevBayes lab
 
 Contributed by Michael Landis, Tracy Heath, and Jeremy Brown.
 
     revbayes.zip
-    
-{% comment %}    
-## Used in the ? lab
-
-Contributed by ?
-
-    yule.tre
-{% endcomment %}    
-    
