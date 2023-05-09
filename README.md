@@ -38,6 +38,7 @@ Contributed by Joe Bielawski.
     
 ## Used in the RevBayes lab
 
-Contributed by Michael Landis, Tracy Heath, and Jeremy Brown.
+The genetree directory contains files used in the [Nucleotide substitution models](https://revbayes.github.io/tutorials/ctmc/) tutorial (written by Sebastian Höhna, Michael Landis, Brian Moore, and Tracy Heath).
+The divtime directory contains files used in the [Estimating a Time-Calibrated Phylogeny of Fossil and Extant Taxa using Morphological Data](https://revbayes.github.io/tutorials/fbd_simple/) tutorial (written Joëlle Barido-Sottani, Joshua Justison, April M. Wright, Rachel C. M. Warnock, Walker Pett, and Tracy A. Heath).
 
     revbayes.zip
