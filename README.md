@@ -42,3 +42,9 @@ The genetree directory contains files used in the [Nucleotide substitution model
 The divtime directory contains files used in the [Estimating a Time-Calibrated Phylogeny of Fossil and Extant Taxa using Morphological Data](https://revbayes.github.io/tutorials/fbd_simple/) tutorial (written Joëlle Barido-Sottani, Joshua Justison, April M. Wright, Rachel C. M. Warnock, Walker Pett, and Tracy A. Heath).
 
     revbayes.zip
+
+## Used in the Migrate lab
+
+Contributed by Peter Beerli.
+    
+    migrate_tutorial.zip
