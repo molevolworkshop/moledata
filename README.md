@@ -48,3 +48,10 @@ The divtime directory contains files used in the [Estimating a Time-Calibrated P
 Contributed by Peter Beerli.
     
     migrate_tutorial.zip
+    
+## Used in the SVDQuartets lab
+
+Contributed by Laura Kubatko and David Swofford.
+
+    svdquartets_tutorial.zip
+    
