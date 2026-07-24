@@ -1,0 +1,16 @@
+name: Notify Website Repo on Update
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  ping-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Website Rebuild
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT_TO_TRIGGER_WEBSITE }} 
+          repository: molevolworkshop/molevolworkshop.github.io
+          event-type: moledata-updated
