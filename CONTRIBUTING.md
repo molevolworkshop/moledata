@@ -15,18 +15,18 @@ Contributions should be done via pull request, so you need to fork the [moledata
 1. **Find or create your folder:** `lectures/<your-last-name>/` — e.g. `lectures/beerli/`.
 2. **Add your slides** as a PDF with a short, descriptive name:
    `lectures/beerli/coalescent-intro.pdf`.
-   Extra files that go with a talk (a script, a small dataset) go in the **same folder**. Please see [Naming](#naming) for naming conventions. Note that large files and PDFs are stored with Git LFS, so check [Git LFS](#git-lfs) for more information.
-3. **For a lab:** put your files in `labs/<lab-name>/` and update that folder's `README.md`. Please see [Naming](#naming) for naming conventions.
+   Extra files that go with a talk (a script, a small dataset) go in the **same folder**. Please see [Naming](#naming-conventions) for naming conventions. Note that large files and PDFs are stored with Git LFS, so check [Git LFS](#one-time-setup-install-git-lfs) for more information.
+3. **For a lab:** put your files in `labs/<lab-name>/` and update that folder's `README.md`. Please see [Naming](#naming-conventions) for naming conventions.
 4. **Commit and open a pull request.** The maintainer reviews and merges.
 
 That's the whole process. The two sections below are only if you need the details.
 
-- [Naming — where files go and what to call them](#naming)
-- [One-time setup: install Git LFS](#git-lfs)
+- [Naming conventions](#naming-conventions)
+- [One-time setup: install Git LFS](#one-time-setup-install-git-lfs)
 
 ---
 
-## Naming conventions {#naming}
+## Naming conventions
 
 - **Slides live in your faculty folder:** `lectures/<your-last-name>/` (lowercase, e.g.
   `beerli`, `solis-lemus`).
@@ -46,7 +46,7 @@ That's the whole process. The two sections below are only if you need the detail
 
 ---
 
-## One-time setup: install Git LFS {#git-lfs}
+## One-time setup: install Git LFS
 
 Large files (PDFs, big datasets) are stored with
 [Git Large File Storage](https://git-lfs.com/), so you need it installed **before you
