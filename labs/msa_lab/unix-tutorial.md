@@ -79,7 +79,7 @@ The copy command (**cp**) is used to copy files to new places. Make a copy of _t
     
 We can also cp a file from the shared directory using absolute and relative paths:
 
-    cp /usr/local/share/examples/mole/MSAlab/example.tre .
+    cp /usr/local/share/examples/mole/msa_lab/example.tre .
     
 will copy the file named _example.tre_ to your current directory but will not change its name. Use ```ls``` to verify that your _myfolder_ directory now contains the file _example.tre_.
 

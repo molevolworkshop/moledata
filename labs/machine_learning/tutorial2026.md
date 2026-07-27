@@ -21,11 +21,11 @@ Rather than typing _/var/pyenv/bin/python3 Machine_Learning_for_Population_Genet
     
 Note: this alias will exist only until you exit your current terminal session. To make the alias permanent (probably not necessary in this case since you will only be doing this tutorial once), you would need to add the above command to your _.bash_profile_ file so that it is executed each time you open a new connection to your virtual machine.
     
-## Navigate to the _machinelearning_ folder
+## Navigate to the _machine_learning_ folder
 
-Use the `cd` (change directory) command to position yourself inside the _machinelearning_ folder where the files for this tutorial are located:
+Use the `cd` (change directory) command to position yourself inside the _machine_learning_ folder where the files for this tutorial are located:
 
-    cd ~/moledata/machinelearning
+    cd ~/moledata/machine_learning
     
 ## Simulating genetic data in msprime
 

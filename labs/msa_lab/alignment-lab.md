@@ -77,9 +77,9 @@ partner. Working with a partner is a great idea!
 
 You will run the alignment software on your remote Jetstream node. Login to your node as explained in the [computer lab intro](/labs/intro/).
 
-Create a new, empty directory named _MSAlab_ and use the following command to copy the tutorial files there:
+Create a new, empty directory named _msa_lab_ and use the following command to copy the tutorial files there:
 ~~~~~~
-cp moledata/MSAlab/* MSAlab
+cp moledata/msa_lab/* msa_lab
 ~~~~~~
 
 ## Exercise 1: basic functions in SeaView and MEGA
@@ -109,7 +109,7 @@ invoke and option as well as a set of double dashes for more verbose
 forms of those options. Examples are given throughout this lab and will
 become intuitive throughout the workshop.
 
-**Change directories into the MSAlab folder.** Refer to the [computer
+**Change directories into the msa_lab folder.** Refer to the [computer
 lab intro page](/labs/intro/) if you have forgotten how to do this.
 
 ### Run MAFFT
@@ -188,7 +188,7 @@ run through SeaView or MEGA itself this could be done.
 * Click *Props > View as proteins* (SeaView) or select Translated Protein Sequences in the main alignment window (MEGA)
 * Click *File > Save prot alignment* (SeaView) or *Data > Export alignment* (MEGA) and save the file as
 *1ped_aa.fasta* with Fasta as the file format
-* Transfer this file to the _MSAlab_ folder on the remote machine
+* Transfer this file to the _msa_lab_ folder on the remote machine
 * Run an iterative alignment in MAFFT by using the
 command:
 ~~~~~~
@@ -226,7 +226,7 @@ sequences?
 **Protip** Try moving both MAFFT amino acid alignments to your
 laptop with scp! Assuming that the IP address of your remote machine is 123.45.67.89:
 ~~~~~~
-scp username@123.45.67.89:MSAlab/mafft_aa*.fasta .
+scp username@123.45.67.89:msa_lab/mafft_aa*.fasta .
 ~~~~~~
 
 {% comment %}
@@ -265,7 +265,7 @@ you the gap penalty used for each alignment?
 **Protip** Try moving all three MUSCLE amino acid alignments to your
 laptop with scp! Assuming that the IP address of your remote machine is 123.45.67.89:
 ~~~~~~
-scp username@123.45.67.89:MSAlab/muscle_aa*.fasta .
+scp username@123.45.67.89:msa_lab/muscle_aa*.fasta .
 ~~~~~~
 
 {% endcomment %}
