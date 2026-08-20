@@ -1,0 +1,278 @@
+name: Process Lecture Materials Issue
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  process-lecture:
+    if: contains(github.event.issue.labels.*.name, 'lecture-update')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Process Issue and Generate Lecture Materials
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const issueBody = context.payload.issue.body || '';
+
+            const parseIssueBody = (body) => {
+              const fields = {};
+              const sections = body.split(/^###\s+/m);
+              for (const section of sections) {
+                if (!section.trim()) continue;
+                const lines = section.split(/\r?\n/);
+                const label = lines[0].trim();
+                const value = lines.slice(1).join('\n').trim();
+                fields[label] = value;
+              }
+              return fields;
+            };
+
+            const issueFields = parseIssueBody(issueBody);
+
+            const getFieldValue = (label) => {
+              const val = issueFields[label] || '';
+              if (val === '_No response_' || val === 'None' || !val) return '';
+              return val;
+            };
+
+            // --- Get Form Fields ---
+            const selectedLecture = getFieldValue('Select Lecture to Update (or choose New)');
+            const lectureTitleInput = getFieldValue('Lecture Title');
+            const lecturer = getFieldValue('Responsible Faculty');
+            const updateStrategy = getFieldValue('Update Strategy');
+            const presentationField = getFieldValue('Lecture Presentation / Material');
+            const readmeContent = getFieldValue('Lecture README Content');
+            const additionalFilesField = getFieldValue('Additional Lecture Files & Attachments');
+
+            // --- Determine Old Slug and New Slug ---
+            let oldSlug = '';
+            let lectureTitle = '';
+
+            if (selectedLecture && selectedLecture !== '-- New Lecture --') {
+              const colonIdx = selectedLecture.indexOf(':');
+              if (colonIdx !== -1) {
+                oldSlug = selectedLecture.substring(0, colonIdx).trim();
+                lectureTitle = selectedLecture.substring(colonIdx + 1).trim();
+              } else {
+                oldSlug = selectedLecture.trim();
+              }
+            }
+
+            let newSlug = oldSlug;
+            if (lectureTitleInput) {
+              lectureTitle = lectureTitleInput;
+              newSlug = lectureTitleInput.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+            }
+
+            if (!newSlug) {
+              core.setFailed("A valid lecture must be selected from the dropdown or a title must be provided.");
+              return;
+            }
+
+            if (!lectureTitle) {
+              lectureTitle = newSlug;
+            }
+
+            console.log(`Old slug: ${oldSlug}, New slug: ${newSlug}, Title: ${lectureTitle}, Presenter: ${lecturer}`);
+
+            // --- Setup Target Directories & Carry Over Files if Slug Changed ---
+            const oldDir = oldSlug ? path.join(process.cwd(), 'materials', 'lectures', oldSlug) : '';
+            const lectureDir = path.join(process.cwd(), 'materials', 'lectures', newSlug);
+
+            if (oldSlug && oldSlug !== newSlug && fs.existsSync(oldDir)) {
+              console.log(`Slug changed from ${oldSlug} to ${newSlug}. Moving existing directory...`);
+              if (!fs.existsSync(path.dirname(lectureDir))) {
+                fs.mkdirSync(path.dirname(lectureDir), { recursive: true });
+              }
+              fs.renameSync(oldDir, lectureDir);
+              console.log(`Successfully moved ${oldDir} to ${lectureDir}`);
+            } else if (!fs.existsSync(lectureDir)) {
+              fs.mkdirSync(lectureDir, { recursive: true });
+            }
+
+            // --- Handle Update Strategy (Clear directory if requested) ---
+            const shouldClear = updateStrategy.includes('Delete existing files');
+            if (shouldClear) {
+              console.log(`Clearing existing files in ${lectureDir} per update strategy...`);
+              const existingFiles = fs.readdirSync(lectureDir);
+              for (const file of existingFiles) {
+                const curPath = path.join(lectureDir, file);
+                if (fs.lstatSync(curPath).isFile()) {
+                  fs.unlinkSync(curPath);
+                  console.log(`Deleted old file: ${file}`);
+                }
+              }
+            }
+
+            // --- Helper to extract URLs from markdown links generated by GitHub drag-and-drop ---
+            const extractUrls = (text) => {
+              const urlRegex = /\[([^\]]+)\]\((https:\/\/[^\)]+)\)/g;
+              const files = [];
+              let match;
+              while ((match = urlRegex.exec(text)) !== null) {
+                files.push({ name: match[1], url: match[2] });
+              }
+              return files;
+            };
+
+            const extraFiles = extractUrls(additionalFilesField);
+
+            // --- Download helper ---
+            const downloadFile = async (fileUrl, outputPath) => {
+              const res = await fetch(fileUrl);
+              if (!res.ok) throw new Error(`Failed to fetch ${fileUrl}: ${res.statusText}`);
+              const buffer = Buffer.from(await res.arrayBuffer());
+              fs.writeFileSync(outputPath, buffer);
+            };
+
+            // --- Smart Parse Presentation / Material Field ---
+            let matLoc = '';
+            let pdfFileName = '';
+            const trimmedPresentationInput = presentationField.trim();
+            const presentationMarkdownFiles = extractUrls(presentationField);
+
+            if (presentationMarkdownFiles.length > 0) {
+              // Case 1: Drag-and-drop file upload (On-site)
+              const fileObj = presentationMarkdownFiles[0];
+              const ext = path.extname(fileObj.name) || '.pdf';
+              pdfFileName = `${newSlug}${ext}`;
+              const targetPath = path.join(lectureDir, pdfFileName);
+              
+              console.log(`Downloading uploaded presentation to ${targetPath}...`);
+              await downloadFile(fileObj.url, targetPath);
+              matLoc = ''; // Left blank for on-site uploads
+            } else if (trimmedPresentationInput.startsWith('http://') || trimmedPresentationInput.startsWith('https://')) {
+              // Case 2: Raw off-site URL pasted directly
+              matLoc = trimmedPresentationInput;
+              console.log(`Using off-site material URL: ${matLoc}`);
+            }
+
+            // --- Handle Additional Files ---
+            for (const fileObj of extraFiles) {
+              const targetPath = path.join(lectureDir, fileObj.name);
+              console.log(`Downloading extra file to ${targetPath}...`);
+              await downloadFile(fileObj.url, targetPath);
+            }
+
+            // --- Write README.md if provided ---
+            if (readmeContent) {
+              const readmePath = path.join(lectureDir, 'README.md');
+              fs.writeFileSync(readmePath, readmeContent, 'utf8');
+              console.log(`Saved README.md for ${newSlug}`);
+            }
+
+            // --- Update or Create _data/materials-registry.csv ---
+            const dataDir = path.join(process.cwd(), '_data');
+            if (!fs.existsSync(dataDir)) {
+              fs.mkdirSync(dataDir, { recursive: true });
+            }
+            const registryPath = path.join(dataDir, 'materials-registry.csv');
+
+            let registryRows = [];
+            let headers = ['item_id', 'category', 'title', 'presenter', 'material_location'];
+
+            if (fs.existsSync(registryPath)) {
+              try {
+                const content = fs.readFileSync(registryPath, 'utf8').trim();
+                const lines = content.split('\n');
+                headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
+                registryRows = lines.slice(1).map(r => r.split(',').map(v => v.trim().replace(/['"]/g, '')));
+              } catch (e) {
+                console.log("Could not parse existing registry, creating a new one with updated schema.");
+              }
+            }
+
+            if (!headers.includes('item_id')) {
+              headers = ['item_id', 'category', 'title', 'presenter', 'material_location'];
+            }
+
+            const itemIdIdx = headers.indexOf('item_id');
+
+            // Filter out oldSlug entry if the slug was renamed
+            let updatedRows = registryRows.filter(row => {
+              const rowId = itemIdIdx !== -1 ? row[itemIdIdx] : '';
+              if (oldSlug && oldSlug !== newSlug && rowId === oldSlug) {
+                return false;
+              }
+              return true;
+            });
+
+            let found = false;
+
+            const newEntry = {
+              item_id: newSlug,
+              category: 'lecture',
+              title: lectureTitle,
+              presenter: lecturer,
+              material_location: matLoc
+            };
+
+            updatedRows = updatedRows.map(row => {
+              const rowId = itemIdIdx !== -1 ? row[itemIdIdx] : '';
+              if (rowId === newSlug) {
+                found = true;
+                return headers.map(h => newEntry[h] || row[headers.indexOf(h)] || '');
+              }
+              return row;
+            });
+
+            if (!found) {
+              const rowValues = headers.map(h => `"${(newEntry[h] || '').replace(/"/g, '""')}"`);
+              updatedRows.push(rowValues);
+            } else {
+              updatedRows = updatedRows.map(row => (Array.isArray(row) ? headers.map(h => `"${(row[headers.indexOf(h)] || '').replace(/"/g, '""')}"`).join(',') : row));
+            }
+
+            const finalCsvContent = [headers.join(','), ...(found ? updatedRows : updatedRows.map(r => Array.isArray(r) ? r.join(',') : r))].join('\n') + '\n';
+            fs.writeFileSync(registryPath, finalCsvContent, 'utf8');
+            console.log("Updated materials-registry.csv with smart material location detection");
+
+            // --- Export Variables for PR Step ---
+            core.exportVariable('LECTURE_SLUG', newSlug);
+            core.exportVariable('LECTURE_TITLE', lectureTitle);
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "update lecture materials: ${{ env.LECTURE_TITLE }}"
+          title: "Lecture Materials Update: ${{ env.LECTURE_TITLE }}"
+          body: |
+            Automated lecture material update generated from Issue #${{ github.event.issue.number }}.
+            
+            * **Lecture:** ${{ env.LECTURE_TITLE }} (`${{ env.LECTURE_SLUG }}`)
+            * **Target Directory:** `materials/lectures/${{ env.LECTURE_SLUG }}/`
+            * **Registry Updated:** `_data/materials-registry.csv`
+            
+            Closes #${{ github.event.issue.number }}
+          branch: "update-lecture/${{ env.LECTURE_SLUG }}"
+          base: "main"
+          delete-branch: true
+
+      - name: Comment on Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Thanks @${context.actor}! An automated Pull Request has been generated for your lecture materials update. Organizers will review and merge it shortly.`
+            })

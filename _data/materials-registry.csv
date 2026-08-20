@@ -1,0 +1,49 @@
+item_id,category,title,presenter,material_location
+intro-phylogenetics,lecture,Introduction to phylogenetics,tracy-heath,https://doi.org/10.6084/m9.figshare.32314983
+scientific-ethics,lecture,Scientific ethics,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Ethics_intro_2025_A.pdf
+intro-likelihood,lecture,Introduction to likelihood,rosana-zenil-ferguson,https://roszenil.github.io/mytutorials/docs/statistics/files/likelihood_slides.pdf
+likelihood-phylogenetics,lecture,Likelihood in phylogenetics,rosana-zenil-ferguson,https://roszenil.github.io/mytutorials/docs/statistics/files/likelihood_phylogenetics.pdf
+intro-computer-lab,lab,Computer introduction,TAs,/labs/intro
+alignment-lab,lab,Sequence alignment ,TAs,/labs/alignment/
+phylogenetic-models,lecture,Phylogenetic models,rosana-zenil-ferguson,https://roszenil.github.io/mytutorials/docs/statistics/files/phylogenetic_models.pdf
+bayesian-inference-intro,lecture,Introduction to Bayesian inference,rosana-zenil-ferguson,https://roszenil.github.io/mytutorials/docs/statistics/files/bayesian_stats_intro.pdf
+model-selection,lecture,Model selection,jeremy-brown,
+bayesian-phylogenetics,lecture,Bayesian phylogenetics,claudia-solis-lemus,
+iqtree-intro,lecture,Introduction to IQ-TREE,TAs,
+iqtree-lab,lab,IQ-TREE,TAs,https://iqtree.github.io/workshop/molevol_tutorial2026
+revbayes-graphical-models,lecture,RevBayes graphical models,jeremy-brown,/materials/lectures/brown/revbayes-graphical-models.pdf
+revbayes-gene-trees,lab,RevBayes gene trees,jeremy-brown,https://revbayes.github.io/tutorials/ctmc/
+divergence-time-estimation,lecture,Divergence time estimation,tracy-heath,https://figshare.com/articles/Bayesian_Divergence-Time_Estimation_Lecture/6849005
+divergence-time-lab,lab,Divergence time estimation,tracy-heath,https://revbayes.github.io/tutorials/fbd_simple
+coalescent-intro,lecture,Introduction to the coalescent,peter-beerli,
+coalescent-extending,lecture,Extending the coalescent,peter-beerli,
+species-tree-estimation,lecture,Species tree estimation,laura-kubatko,
+paup-session,lab,PAUP*,david-swofford,{{ site.baseurl }}/materials/labs/paup/paup-lab.html
+svdquartets-tutorial,lab,Species tree estimation with SVDQuartets,laura-kubatko,{{ site.baseurl }}/materials/labs/svdquartets_tutorial/species-trees-tutorial-2026.html
+reticulate-evolution-networks,lecture,Reticulate evolution and phylogenetic networks,claudia-solis-lemus,https://figshare.com/articles/presentation/MOLE_2025_Phylogenetic_networks_lecture/29144483?file=54806237
+network-models-tutorial,lab,Phylogenetic network models,claudia-solis-lemus,https://solislemuslab.github.io/snaq-tutorial/
+migrate-bayesfactor,lecture,Migrate and Bayes factors,peter-beerli,
+migrate-tutorial,lab,Migrate,peter-beerli,{{ site.baseurl }}/materials/labs/migrate_tutorial/MIGRATEtutorial2023.html
+ant-phylogenomics-1,lecture,Ant phylogenomics I,corrie-moreau,
+ant-phylogenomics-2,lecture,Ant phylogenomics II,corrie-moreau,
+science-under-pressure,lecture,Science under pressure,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Values_Pressure_Ethics_2026.pdf
+theories-molecular-evolution,lecture,Theories of molecular evolution,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Bielawski_lecture_PART_1.pdf
+codon-models-intro,lecture,Introduction to codon models,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Bielawski_lecture_PART_2.pdf
+adaptive-protein-intro,lecture,Adaptive protein evolution I,belinda-chang,
+adaptive-protein-selection,lecture,Adaptive protein evolution II,belinda-chang,
+machine-learning,lecture,Machine learning in molecular evolution,megan-smith,
+machine-learning-lab,lab,Machine learning,megan-smith,/machine-learning-tutorial/
+paml-lab,lab,PAML,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/lab.html http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/pamlDEMO.pdf
+paml-advanced-resources,lab,PAML advanced resources,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/Resources.html https://bitbucket.org/EvoWorks/protocol-inference-of-episodic-selection/downloads
+phylodynamics-1,lecture,Phylodynamics I,mandev-gill,
+phylodynamics-2,lecture,Phylodynamics II,mandev-gill,
+phylogeography,lecture,Phylogeography,scott-edwards,
+pangenomes,lecture,Pangenomes and comparative genomics,scott-edwards,
+deep-phylogenomics,lecture,Deep phylogenomics,laura-eme,
+phylogenomics,lecture,Phylogenomics,emily-jane-mctavish,
+tree-updating,lab,Tree updating,emily-jane-mctavish,https://github.com/snacktavish/TreeUpdatingComparison/blob/master/TreeUpdating.md
+open-tree-of-life,lecture,Open Tree of Life,emily-jane-mctavish,
+tree-comparison,lab,Tree comparison,emily-jane-mctavish,https://github.com/snacktavish/Mole2023/blob/master/TreeComparison.md
+evolutionary-applications,lecture,Evolutionary applications of genomic data,lacey-knowles,
+ethics-panel-discussion,lecture,Ethics panel discussion,joseph-bielawski,http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Ethics_intro_2025_A.pdf http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Values_Pressure_Ethics_2026.pdf
+open-lab,lab,Open lab / project time,,
