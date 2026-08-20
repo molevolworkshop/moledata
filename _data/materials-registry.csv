@@ -11,7 +11,7 @@ item_id,category,title,presenter,material_location
 "bayesian-phylogenetics","lecture","Bayesian phylogenetics","claudia-solis-lemus",""
 "iqtree-intro","lecture","Introduction to IQ-TREE","TAs",""
 "iqtree-lab","lab","IQ-TREE","TAs","https://iqtree.github.io/workshop/molevol_tutorial2026"
-"revbayes-graphical-models","lecture","RevBayes graphical models","jeremy-brown","/materials/lectures/brown/revbayes-graphical-models.pdf"
+"revbayes-graphical-models","lecture","RevBayes graphical models","jeremy-brown",""
 "revbayes-gene-trees","lab","RevBayes gene trees","jeremy-brown","https://revbayes.github.io/tutorials/ctmc/"
 "divergence-time-estimation","lecture","Divergence time estimation","tracy-heath","https://figshare.com/articles/Bayesian_Divergence-Time_Estimation_Lecture/6849005"
 "divergence-time-lab","lab","Divergence time estimation","tracy-heath","https://revbayes.github.io/tutorials/fbd_simple"
