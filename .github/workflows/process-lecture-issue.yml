@@ -97,8 +97,8 @@ jobs:
             console.log(`Old slug: ${oldSlug}, New slug: ${newSlug}, Title: ${lectureTitle}, Presenter: ${lecturer}`);
 
             // --- Setup Target Directories & Carry Over Files if Slug Changed ---
-            const oldDir = oldSlug ? path.join(process.cwd(), 'materials', 'lectures', oldSlug) : '';
-            const lectureDir = path.join(process.cwd(), 'materials', 'lectures', newSlug);
+            const oldDir = oldSlug ? path.join(process.cwd(), 'lectures', oldSlug) : '';
+            const lectureDir = path.join(process.cwd(), 'lectures', newSlug);
 
             if (oldSlug && oldSlug !== newSlug && fs.existsSync(oldDir)) {
               console.log(`Slug changed from ${oldSlug} to ${newSlug}. Moving existing directory...`);
@@ -264,7 +264,7 @@ jobs:
             Automated lecture material update generated from Issue #${{ github.event.issue.number }}.
             
             * **Lecture:** ${{ env.LECTURE_TITLE }} (`${{ env.LECTURE_SLUG }}`)
-            * **Target Directory:** `materials/lectures/${{ env.LECTURE_SLUG }}/`
+            * **Target Directory:** `lectures/${{ env.LECTURE_SLUG }}/`
             * **Registry Updated:** `_data/materials-registry.csv`
             
             Closes #${{ github.event.issue.number }}
