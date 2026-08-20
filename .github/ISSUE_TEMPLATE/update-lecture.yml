@@ -62,9 +62,10 @@ body:
       options:
         - Claudia Solís-Lemus
         - Other 
-        - None
+        - TAs
+        - NA
     validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: update_strategy
