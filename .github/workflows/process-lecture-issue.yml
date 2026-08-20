@@ -232,7 +232,10 @@ jobs:
               const rowId = itemIdIdx !== -1 ? row[itemIdIdx] : '';
               if (rowId === newSlug) {
                 found = true;
-                return headers.map(h => newEntry[h] || row[headers.indexOf(h)] || '');
+                return headers.map(h => {
+                  if (h === 'material_location') return newEntry[h];
+                  return newEntry[h] || row[headers.indexOf(h)] || '';
+                });
               }
               return row;
             });
