@@ -9,39 +9,39 @@ body:
       label: Select Lecture to Update (or choose New)
       description: Choose an existing lecture (item_id:title) from the course schedule, or select the option to create a new one.
       options:
-        - -- New Lecture --
-        - intro-phylogenetics: Introduction to phylogenetics
-        - scientific-ethics: Scientific ethics
-        - intro-likelihood: Introduction to likelihood
-        - likelihood-phylogenetics: Likelihood in phylogenetics
-        - phylogenetic-models: Phylogenetic models
-        - bayesian-inference-intro: Introduction to Bayesian inference
-        - model-selection: Model selection
-        - bayesian-phylogenetics: Bayesian phylogenetics
-        - iqtree-intro: Introduction to IQ-TREE
-        - revbayes-graphical-models: RevBayes graphical models
-        - divergence-time-estimation: Divergence time estimation
-        - coalescent-intro: Introduction to the coalescent
-        - coalescent-extending: Extending the coalescent
-        - species-tree-estimation: Species tree estimation
-        - reticulate-evolution-networks: Reticulate evolution and phylogenetic networks
-        - migrate-bayesfactor: Migrate and Bayes factors
-        - ant-phylogenomics-1: Ant phylogenomics I
-        - ant-phylogenomics-2: Ant phylogenomics II
-        - science-under-pressure: Science under pressure
-        - theories-molecular-evolution: Theories of molecular evolution
-        - codon-models-intro: Introduction to codon models
-        - adaptive-protein-intro: Adaptive protein evolution I
-        - adaptive-protein-selection: Adaptive protein evolution II
-        - machine-learning: Machine learning in molecular evolution
-        - phylodynamics-1: Phylodynamics I
-        - phylodynamics-2: Phylodynamics II
-        - phylogeography: Phylogeography
-        - pangenomes: Pangenomes and comparative genomics
-        - deep-phylogenomics: Deep phylogenomics
-        - phylogenomics: Phylogenomics
-        - open-tree-of-life: Open Tree of Life
-        - evolutionary-applications: Evolutionary applications of genomic data
+        - "-- New Lecture --"
+        - "intro-phylogenetics: Introduction to phylogenetics"
+        - "scientific-ethics: Scientific ethics"
+        - "intro-likelihood: Introduction to likelihood"
+        - "likelihood-phylogenetics: Likelihood in phylogenetics"
+        - "phylogenetic-models: Phylogenetic models"
+        - "bayesian-inference-intro: Introduction to Bayesian inference"
+        - "model-selection: Model selection"
+        - "bayesian-phylogenetics: Bayesian phylogenetics"
+        - "iqtree-intro: Introduction to IQ-TREE"
+        - "revbayes-graphical-models: RevBayes graphical models"
+        - "divergence-time-estimation: Divergence time estimation"
+        - "coalescent-intro: Introduction to the coalescent"
+        - "coalescent-extending: Extending the coalescent"
+        - "species-tree-estimation: Species tree estimation"
+        - "reticulate-evolution-networks: Reticulate evolution and phylogenetic networks"
+        - "migrate-bayesfactor: Migrate and Bayes factors"
+        - "ant-phylogenomics-1: Ant phylogenomics I"
+        - "ant-phylogenomics-2: Ant phylogenomics II"
+        - "science-under-pressure: Science under pressure"
+        - "theories-molecular-evolution: Theories of molecular evolution"
+        - "codon-models-intro: Introduction to codon models"
+        - "adaptive-protein-intro: Adaptive protein evolution I"
+        - "adaptive-protein-selection: Adaptive protein evolution II"
+        - "machine-learning: Machine learning in molecular evolution"
+        - "phylodynamics-1: Phylodynamics I"
+        - "phylodynamics-2: Phylodynamics II"
+        - "phylogeography: Phylogeography"
+        - "pangenomes: Pangenomes and comparative genomics"
+        - "deep-phylogenomics: Deep phylogenomics"
+        - "phylogenomics: Phylogenomics"
+        - "open-tree-of-life: Open Tree of Life"
+        - "evolutionary-applications: Evolutionary applications of genomic data"
     validations:
       required: true
 
