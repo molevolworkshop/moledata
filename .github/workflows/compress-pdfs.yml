@@ -1,0 +1,70 @@
+name: Compress PDFs in PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**/*.pdf'
+
+jobs:
+  compress-pdfs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          lfs: true # <-- Crucial: Downloads actual binary files instead of LFS pointers
+
+      - name: Pull Git LFS objects
+        run: git lfs pull
+
+      - name: Skip if last commit was automated
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=format="%s")
+          if [[ "$COMMIT_MSG" == *"Auto-compress PDF files"* ]]; then
+            echo "Last commit was already an automated PDF compression. Skipping."
+            exit 0
+          fi
+
+      - name: Install Ghostscript
+        run: sudo apt-get update && sudo apt-get install -y ghostscript
+
+      - name: Compress modified or added PDFs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin ${GITHUB_BASE_REF}
+
+          PDF_FILES=$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep '\.pdf$' || true)
+
+          for file in $PDF_FILES; do
+            if [ -f "$file" ]; then
+              echo "Compressing $file..."
+              temp_file="${file}.compressed.pdf"
+              
+              gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook \
+                 -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$temp_file" "$file"
+              
+              if [ -f "$temp_file" ]; then
+                mv "$temp_file" "$file"
+                echo "Successfully compressed $file"
+              else
+                rm -f "$temp_file"
+              fi
+            fi
+          done
+
+          if git diff --quiet; then
+            echo "No significant size changes after compression."
+          else
+            git add .
+            git commit -m "Auto-compress PDF files via Ghostscript [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
+            echo "Pushed compressed PDFs back to PR branch."
+          fi
