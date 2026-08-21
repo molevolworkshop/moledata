@@ -1,27 +1,3 @@
-#nexus
-
-[ This example just simulates three sequences under the HKY model ]
-
-begin paup;
-	cd *;
-	set warntree=no notifybeep=no;
-end;
-
-begin taxa;
-	dimensions ntax=3;
-	taxlabels X Y Z;
-end;
-
-begin trees;
-	tree 1 = [&R] ((X:0.05,Y:0.05):0.45,Z:0.5);
-end;
-
-begin dnasim;	
-	simdata nchar=10000;
-	lset nst=6 basefreq=(.1 .2 .3 .4) rmatrix=(1 4 1 1 4 1);
-	truetree source=memory treenum=1 showtruetree=brlens;
-	beginsim nreps=1 seed=0 monitor=y;
-		[ Ordinarily, there would be commands in here, but we're just
-		  getting started ]
-	endsim;
-end;
+version https://git-lfs.github.com/spec/v1
+oid sha256:78ae55a6abc25a2090424e4c473f8681e1bdd6708cf6fa682625133b32ffa8ee
+size 540
