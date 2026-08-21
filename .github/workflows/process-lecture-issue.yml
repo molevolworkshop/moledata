@@ -282,6 +282,9 @@ jobs:
           branch: "update-lecture/${{ env.LECTURE_SLUG }}"
           base: "main"
           delete-branch: true
+          add-paths: |
+            lectures/
+            _data/materials-registry.csv
 
       - name: Comment on Issue
         uses: actions/github-script@v7
