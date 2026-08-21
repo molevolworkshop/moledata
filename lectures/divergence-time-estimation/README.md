@@ -1,0 +1,2 @@
+This lecture is by Tracy Heath and taken from [here](https://figshare.com/articles/presentation/Bayesian_Divergence-Time_Estimation_Lecture/6849005?file=64740933) and republished under a [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+Check out her other materials, they are great.
