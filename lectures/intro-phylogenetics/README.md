@@ -1,0 +1,2 @@
+This lecture is taken from [here](https://figshare.com/articles/presentation/Lecture_on_Tree-thinking_and_introduction_to_phylogenetics_/32314983?file=64659810) and is republished under a [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+Check out her other educational materials, they're great!
