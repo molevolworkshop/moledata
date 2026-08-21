@@ -3,7 +3,7 @@ name: Update Lecture Issue Template - Lecture
 on:
   push:
     paths:
-      - 'materials-registry.csv'
+      - '_data/materials-registry.csv'
   workflow_dispatch:
 
 concurrency:
@@ -29,25 +29,28 @@ jobs:
             const templatePath = '.github/ISSUE_TEMPLATE/update-lecture.yml';
             const csvPath = '_data/materials-registry.csv';
 
-            // 1. Parse CSV to build lecture options
+            // 1. Parse CSV to build lecture options (excluding labs)
             const options = ['-- New Lecture --'];
             if (fs.existsSync(csvPath)) {
               const fileContent = fs.readFileSync(csvPath, 'utf8');
               const lines = fileContent.split(/\r?\n/);
               if (lines.length > 0) {
-                const headers = lines[0].split(',').map(h => h.trim());
+                const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
                 const idIndex = headers.indexOf('item_id');
                 const titleIndex = headers.indexOf('title');
+                const categoryIndex = headers.indexOf('category');
 
                 if (idIndex !== -1 && titleIndex !== -1) {
                   for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
-                    // Simple CSV parsing handling basic fields
                     const cols = line.split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
                     const itemId = cols[idIndex];
                     const title = cols[titleIndex];
-                    if (itemId && title) {
+                    const category = categoryIndex !== -1 ? cols[categoryIndex] : 'lecture';
+
+                    // Only include if it has an ID, a title, and is a lecture
+                    if (itemId && title && category === 'lecture') {
                       options.push(`${itemId}: ${title}`);
                     }
                   }
@@ -58,13 +61,13 @@ jobs:
             let templateContent = fs.readFileSync(templatePath, 'utf8');
             const optionsYaml = options.map(opt => `        - "${opt}"`).join('\n');
 
-            // We can match the options section under id: select_lecture using regex
+            // Match options section under id: select_lecture using regex
             const regex = /(    id: select_lecture[\s\S]*?      options:\n)([\s\S]*?)(?=\n  - type:|$)/;
             
             if (regex.test(templateContent)) {
               templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
               fs.writeFileSync(templatePath, templateContent, 'utf8');
-              console.log('Successfully updated lecture template options.');
+              console.log('Successfully updated lecture template options (excluding labs).');
             } else {
               core.setFailed('Could not locate select_lecture options block in the template.');
             }
@@ -79,6 +82,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to the issue template required."
           else
-            git commit -m "chore: auto-update lecture options from materials registry"
+            git commit -m "chore: auto-update lecture options from materials registry (excluding labs)"
             git push
           fi
