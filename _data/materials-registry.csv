@@ -2,7 +2,7 @@ item_id,category,title,presenter,material_location
 "intro-phylogenetics","lecture","Introduction to phylogenetics","tracy-heath",""
 "scientific-ethics","lecture","Scientific ethics","joseph-bielawski","http://awarnach.mathstat.dal.ca/~joeb/PAML_lab/slides/Ethics_intro_2025_A.pdf"
 "intro-likelihood","lecture","Introduction to likelihood","rosana-zenil-ferguson",""
-"likelihood-phylogenetics","lecture","Likelihood in phylogenetics","rosana-zenil-ferguson","https://roszenil.github.io/mytutorials/docs/statistics/files/likelihood_phylogenetics.pdf"
+"likelihood-phylogenetics","lecture","Likelihood in phylogenetics","rosana-zenil-ferguson",""
 "intro-computer-lab","lab","Computer introduction","TAs","/labs/intro"
 "alignment-lab","lab","Sequence alignment","TAs","/labs/alignment/"
 "phylogenetic-models","lecture","Phylogenetic models","rosana-zenil-ferguson","https://roszenil.github.io/mytutorials/docs/statistics/files/phylogenetic_models.pdf"
