@@ -270,6 +270,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.DATA_PAT }}
           commit-message: "update lecture materials: ${{ env.LECTURE_TITLE }}"
           title: "Lecture Materials Update: ${{ env.LECTURE_TITLE }}"
           body: |
