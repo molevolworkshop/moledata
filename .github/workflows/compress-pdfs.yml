@@ -1,9 +1,8 @@
 name: Compress PDFs in PR
 
 on:
-  push:
-    branches:
-      - 'update-lecture/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - '**/*.pdf'
 
