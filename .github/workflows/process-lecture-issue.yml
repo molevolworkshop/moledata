@@ -17,6 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          github-token: ${{ secrets.DATA_PAT }}
           lfs: false
 
       - name: Set up Node.js
@@ -27,7 +28,7 @@ jobs:
       - name: Process Issue and Generate Lecture Materials
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.DATA_PAT }}
           script: |
             const fs = require('fs');
             const path = require('path');

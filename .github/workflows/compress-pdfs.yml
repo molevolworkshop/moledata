@@ -5,7 +5,7 @@ on:
     branches:
       - 'update-lecture/**'
     paths:
-      - '**/*.pdf'
+      - '**/*.pdf
 
 jobs:
   compress-pdfs:
