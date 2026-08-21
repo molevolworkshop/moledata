@@ -60,12 +60,30 @@ body:
       label: Responsible Faculty
       description: Select the faculty member responsible for this lecture.
       options:
-        - Claudia Solís-Lemus
-        - Other 
-        - TAs
-        - NA
-    validations:
-      required: false
+        - "Peter Beerli"
+        - "Joseph Bielawski"
+        - "Jeremy Brown"
+        - "Belinda Chang"
+        - "Scott Edwards"
+        - "Laura Eme"
+        - "Mandev Gill"
+        - "Tracy Heath"
+        - "Lacey Knowles"
+        - "Laura Kubatko"
+        - "Emily Jane McTavish"
+        - "Corrie Moreau"
+        - "Claudia Solís-Lemus"
+        - "Megan Smith"
+        - "David Swofford"
+        - "Rosana Zenil-Ferguson"
+        - "Joshua Justison"
+        - "Analisa Milkey"
+        - "Solomon McShea"
+        - "Thao Nguyen"
+        - "Anne Smith"
+        - "Other"
+        - "TAs"
+        - "NA"
 
   - type: dropdown
     id: update_strategy
