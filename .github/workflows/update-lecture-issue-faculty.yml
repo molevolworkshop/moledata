@@ -23,7 +23,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'molevolworkshop/molevolworkshop.github.io' 
-          token: ${{ secrets.ACCESS_TOKEN }} # Required if the repo is private
           path: 'molevolworkshop.github.io'
 
       - name: Update Faculty Options in Issue Template
