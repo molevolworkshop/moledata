@@ -1,0 +1,100 @@
+name: Update Lecture Issue Template - Faculty
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [faculty-registry-updated]
+
+concurrency:
+  group: update-lecture-template-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-faculty-template:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Current Repository
+        uses: actions/checkout@v4
+
+      - name: Checkout External Faculty Repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'molevolworkshop/molevolworkshop.github.io' 
+          path: 'molevolworkshop.github.io'
+
+      - name: Update Faculty Options in Issue Template
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const templatePath = '.github/ISSUE_TEMPLATE/update-lecture.yml';
+            const facultyCsvPath = path.join('molevolworkshop.github.io','_data', 'faculty-registry.csv'); // Adjust path/filename if needed
+
+            // Parse faculty-registry.csv using 'name' and 'ID' columns
+            const facultyNames = [];
+            if (fs.existsSync(facultyCsvPath)) {
+              const fileContent = fs.readFileSync(facultyCsvPath, 'utf8');
+              const lines = fileContent.split(/\r?\n/);
+              if (lines.length > 0) {
+                const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
+                const nameIndex = headers.indexOf('name');
+                
+                if (nameIndex !== -1) {
+                  for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    const cols = line.split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+                    const name = cols[nameIndex];
+                    if (name && !facultyNames.includes(name)) {
+                      facultyNames.push(name);
+                    }
+                  }
+                }
+              }
+            }
+
+            // Fallback defaults if list is empty
+            if (facultyNames.length === 0) {
+              facultyNames.push("Other", "TAs", "NA");
+            } else {
+              // Ensure standard fallback options are present at the end
+              ['Other', 'TAs', 'NA'].forEach(opt => {
+                if (!facultyNames.includes(opt)) facultyNames.push(opt);
+              });
+            }
+
+            // 2. Load the issue template
+            let templateContent = fs.readFileSync(templatePath, 'utf8');
+
+            // Format options as YAML list items
+            const optionsYaml = facultyNames.map(name => `        - "${name}"`).join('\n');
+
+            // Regex targeting the 'lecturer' dropdown options block
+            const regex = /(    id: lecturer[\s\S]*?      options:\n)([\s\S]*?)(?=\n  - type:|$)/;
+
+            if (regex.test(templateContent)) {
+              templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
+              fs.writeFileSync(templatePath, templateContent, 'utf8');
+              console.log('Successfully updated lecturer template options from external registry.');
+            } else {
+              core.setFailed('Could not locate lecturer options block in the template.');
+            }
+
+      - name: Commit and Push Changes if Template Updated
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.io"
+          
+          git add .github/ISSUE_TEMPLATE/update-lecture.yml
+          
+          if git diff --staged --quiet; then
+            echo "No changes to the issue template required."
+          else
+            git commit -m "chore: auto-update lecturer dropdown options from external faculty registry"
+            git push
+          fi
