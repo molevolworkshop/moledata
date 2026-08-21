@@ -59,12 +59,23 @@ jobs:
             // --- Get Form Fields ---
             const selectedLecture = getFieldValue('Select Lecture to Update (or choose New)');
             const lectureTitleInput = getFieldValue('Lecture Title');
-            const lecturer = getFieldValue('Responsible Faculty');
+            const rawLecturer = getFieldValue('Responsible Faculty');
             const updateStrategy = getFieldValue('Update Strategy');
             const presentationField = getFieldValue('Lecture Presentation / Material');
             const readmeContent = getFieldValue('Lecture README Content');
             const additionalFilesField = getFieldValue('Additional Lecture Files & Attachments');
 
+            // --- Extract Presenter ID/Name from 'Name : ID' format ---
+            let lecturer = '';
+            if (rawLecturer) {
+              const colonIdx = rawLecturer.indexOf(':');
+              if (colonIdx !== -1) {
+                // Takes the ID part after the colon, or change to 0 if you want the Name instead
+                lecturer = rawLecturer.substring(colonIdx + 1).trim();
+              } else {
+                lecturer = rawLecturer.trim();
+              }
+            }
             // --- Determine Old Slug and New Slug ---
             let oldSlug = '';
             let lectureTitle = '';
