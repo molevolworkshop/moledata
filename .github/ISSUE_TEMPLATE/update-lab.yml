@@ -50,7 +50,8 @@ body:
     attributes:
       label: "Responsible Faculty / Author"
       description: "Name of the faculty member or instructor leading this lab."
-      placeholder: "e.g., Claudia Solís-Lemus"
+      options: 
+        - "-- New Lab --"
     validations:
       required: false
 
