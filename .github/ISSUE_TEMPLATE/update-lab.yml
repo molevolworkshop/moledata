@@ -46,7 +46,7 @@ body:
       required: false
 
   - type: dropdown
-    id: responsible_faculty
+    id: lecturer
     attributes:
       label: "Responsible Faculty / Author"
       description: "Name of the faculty member or instructor leading this lab."

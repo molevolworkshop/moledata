@@ -64,7 +64,7 @@ jobs:
               }
             }
 
-            // Define targets and their corresponding field IDs and defaults
+            // Define targets, their corresponding field IDs, and default fallbacks
             const targets = [
               { 
                 path: '.github/ISSUE_TEMPLATE/update-lecture.yml', 
@@ -73,7 +73,7 @@ jobs:
               },
               { 
                 path: '.github/ISSUE_TEMPLATE/update-lab.yml', 
-                fieldId: 'responsible_faculty', 
+                fieldId: 'lecturer', 
                 defaults: ['-- Not Listed / Write-in --', 'Other', 'TAs', 'NA'] 
               }
             ];
@@ -95,7 +95,8 @@ jobs:
               let templateContent = fs.readFileSync(target.path, 'utf8');
               const optionsYaml = currentOptions.map(opt => `        - "${opt}"`).join('\n');
 
-              const regex = new RegExp(`(    id: ${target.fieldId}[\\s\\S]*?      options:\\n)([\\s\\S]*?)(?=\\n  - type:|$)`);
+              // Strict scoped regex: stops immediately at the next field property or next form element
+              const regex = new RegExp(`(    id: ${target.fieldId}[\\s\\S]*?      options:\\n)([\\s\\S]*?)(?=\\n    (description|validations|placeholder):|\\n  - type:|$)`);
 
               if (regex.test(templateContent)) {
                 templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
