@@ -20,6 +20,21 @@ body:
       description: "Choose an existing lab to modify, or select New Lab to create one."
       options:
         - "-- New Lab --"
+        - "intro-computer-lab: Computer introduction"
+        - "alignment-lab: Sequence alignment"
+        - "iqtree-lab: IQ-TREE"
+        - "revbayes-gene-trees: RevBayes gene trees"
+        - "divergence-time-lab: Divergence time estimation"
+        - "paup-session: PAUP*"
+        - "svdquartets-tutorial: Species tree estimation with SVDQuartets"
+        - "network-models-tutorial: Phylogenetic network models"
+        - "migrate-tutorial: Migrate"
+        - "machine-learning-lab: Machine learning"
+        - "paml-lab: PAML"
+        - "paml-advanced-resources: PAML advanced resources"
+        - "tree-updating: Tree updating"
+        - "tree-comparison: Tree comparison"
+        - "open-lab: Open lab / project time"
 
   - type: input
     id: lab_title
