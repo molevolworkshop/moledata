@@ -95,9 +95,8 @@ jobs:
               let templateContent = fs.readFileSync(target.path, 'utf8');
               const optionsYaml = currentOptions.map(opt => `        - "${opt}"`).join('\n');
 
-              // Strict regex: finds id: fieldId, targets its options:, and stops precisely at its own validations or next key
-              const regex = new RegExp(`(id:\\s*${target.fieldId}[\\s\\S]*?options:\\n)([\\s\\S]*?)(?=\\n\\s*validations:|\\n\\s*-[ \\t]+type:|$)`);
-
+              //matches id: lecturer, captures its options, and stops safely at the next form field (- type:)
+              const regex = new RegExp(`(id:\\s*${target.fieldId}[\\s\\S]*?options:\\s*\\n)([\\s\\S]*?)(?=\\n\\s*-\\s+type:|$)`);
               if (regex.test(templateContent)) {
                 templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
                 fs.writeFileSync(target.path, templateContent, 'utf8');
@@ -106,7 +105,6 @@ jobs:
                 console.log(`Could not locate field ID '${target.fieldId}' in ${target.path}`);
               }
             });
-
       - name: Commit and Push Changes if Templates Updated
         run: |
           git config --global user.name "github-actions[bot]"
