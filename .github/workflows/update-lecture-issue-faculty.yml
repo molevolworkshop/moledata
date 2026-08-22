@@ -1,4 +1,4 @@
-name: Update Lecture Issue Template - Faculty
+name: "Update Issue Templates - Faculty"
 
 on:
   workflow_dispatch:
@@ -6,11 +6,11 @@ on:
     types: [faculty-registry-updated]
 
 concurrency:
-  group: update-lecture-template-${{ github.ref }}
+  group: update-issue-templates-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  update-faculty-template:
+  update-templates:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,14 +26,13 @@ jobs:
           repository: 'molevolworkshop/molevolworkshop.github.io' 
           path: 'molevolworkshop.github.io'
 
-      - name: Update Faculty Options in Issue Template
+      - name: Update Faculty Options in Both Templates
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
             const path = require('path');
 
-            const templatePath = '.github/ISSUE_TEMPLATE/update-lecture.yml';
             const facultyCsvPath = path.join('molevolworkshop.github.io', '_data', 'faculty-registry.csv');
 
             // Parse faculty-registry.csv using 'name' and 'ID' columns
@@ -55,7 +54,6 @@ jobs:
                     const id = idIndex !== -1 ? cols[idIndex] : '';
                     
                     if (name) {
-                      // Format as 'name : ID' or just name if ID is missing
                       const formattedOption = id ? `${name} : ${id}` : name;
                       if (!facultyOptions.includes(formattedOption)) {
                         facultyOptions.push(formattedOption);
@@ -66,40 +64,58 @@ jobs:
               }
             }
 
-            // Ensure standard fallback options are present at the bottom
-            const defaults = ['Other', 'TAs', 'NA'];
-            defaults.forEach(defOpt => {
-              if (!facultyOptions.includes(defOpt)) {
-                facultyOptions.push(defOpt);
+            // Define targets and their corresponding field IDs and defaults
+            const targets = [
+              { 
+                path: '.github/ISSUE_TEMPLATE/update-lecture.yml', 
+                fieldId: 'lecturer', 
+                defaults: ['Other', 'TAs', 'NA'] 
+              },
+              { 
+                path: '.github/ISSUE_TEMPLATE/update-lab.yml', 
+                fieldId: 'responsible_faculty', 
+                defaults: ['-- Not Listed / Write-in --', 'Other', 'TAs', 'NA'] 
+              }
+            ];
+
+            targets.forEach(target => {
+              if (!fs.existsSync(target.path)) {
+                console.log(`Template not found: ${target.path}, skipping.`);
+                return;
+              }
+
+              // Copy options and add target-specific defaults
+              const currentOptions = [...facultyOptions];
+              target.defaults.forEach(defOpt => {
+                if (!currentOptions.includes(defOpt)) {
+                  currentOptions.push(defOpt);
+                }
+              });
+
+              let templateContent = fs.readFileSync(target.path, 'utf8');
+              const optionsYaml = currentOptions.map(opt => `        - "${opt}"`).join('\n');
+
+              const regex = new RegExp(`(    id: ${target.fieldId}[\\s\\S]*?      options:\\n)([\\s\\S]*?)(?=\\n  - type:|$)`);
+
+              if (regex.test(templateContent)) {
+                templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
+                fs.writeFileSync(target.path, templateContent, 'utf8');
+                console.log(`Successfully updated ${target.fieldId} options in ${target.path}`);
+              } else {
+                console.log(`Could not locate field ID '${target.fieldId}' in ${target.path}`);
               }
             });
 
-            let templateContent = fs.readFileSync(templatePath, 'utf8');
-
-            // Format options as YAML list items
-            const optionsYaml = facultyOptions.map(opt => `        - "${opt}"`).join('\n');
-
-            // Regex targeting the 'lecturer' dropdown options block
-            const regex = /(    id: lecturer[\s\S]*?      options:\n)([\s\S]*?)(?=\n  - type:|$)/;
-
-            if (regex.test(templateContent)) {
-              templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
-              fs.writeFileSync(templatePath, templateContent, 'utf8');
-              console.log('Successfully updated lecturer template options from external registry.');
-            } else {
-              core.setFailed('Could not locate lecturer options block in the template.');
-            }
-
-      - name: Commit and Push Changes if Template Updated
+      - name: Commit and Push Changes if Templates Updated
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.io"
           
-          git add .github/ISSUE_TEMPLATE/update-lecture.yml
+          git add .github/ISSUE_TEMPLATE/update-lecture.yml .github/ISSUE_TEMPLATE/update-lab.yml
           
           if git diff --staged --quiet; then
-            echo "No changes to the issue template required."
+            echo "No changes to the issue templates required."
           else
-            git commit -m "chore: auto-update lecturer dropdown options from external faculty registry"
+            git commit -m "chore: auto-update faculty dropdown options in lecture and lab templates"
             git push
           fi

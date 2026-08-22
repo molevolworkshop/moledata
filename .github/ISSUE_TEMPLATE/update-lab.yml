@@ -1,0 +1,84 @@
+name: "Lab Content Creation or Update"
+description: "Submit or update lab materials, data files, and instructions for the workshop."
+title: "Lab Update: [Lab Title or Topic]"
+labels: ["lab-update", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Lab Materials Update
+        Use this form to add a new lab or update existing lab materials, code, or documentation. 
+        An automated pull request will be generated upon submission.
+
+  # ---------------------------------------------------------
+  # SELECTION & STRATEGY
+  # ---------------------------------------------------------
+  - type: dropdown
+    id: lab_select
+    attributes:
+      label: "Select Lab to Update (or choose New)"
+      description: "Choose an existing lab to modify, or select New Lab to create one."
+      options:
+        - "-- New Lab --"
+
+  - type: input
+    id: lab_title
+    attributes:
+      label: "Lab Title"
+      description: "Leave Blank to keep the lab name the same. Required if creating a new lab, or if you want to rename the current one."
+      placeholder: "e.g., Introduction to PhyloNetworks"
+    validations:
+      required: false
+
+  - type: input
+    id: responsible_faculty
+    attributes:
+      label: "Responsible Faculty / Author"
+      description: "Name of the faculty member or instructor leading this lab."
+      placeholder: "e.g., Claudia Solís-Lemus"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: update_strategy
+    attributes:
+      label: "Update Strategy"
+      description: "How should existing files in the target lab directory be handled?"
+      options:
+        - "Keep existing files (default)"
+        - "Delete existing files and replace completely"
+
+  # ---------------------------------------------------------
+  # README & DOCUMENTATION
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_readme
+    attributes:
+      label: "Lab README Content (Markdown)"
+      description: "The primary instructions or overview text for the lab. This will be saved as README.md in the lab directory."
+      placeholder: |
+        # Lab Overview
+        In this lab, we will explore network inference methods...
+    validations:
+      required: false
+
+  # ---------------------------------------------------------
+  # LAB FILES & ATTACHMENTS
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_materials
+    attributes:
+      label: "Primary Lab Document / Notebook"
+      description: "Drag and drop a primary file (like an RMarkdown, Jupyter Notebook, PDF, or script) directly here."
+      placeholder: "Drag and drop your file here..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_files
+    attributes:
+      label: "Additional Data Files & Attachments"
+      description: "Drop any supplementary datasets, alignment files, or extra scripts needed for the lab."
+      placeholder: "Drag and drop additional files here..."
+    validations:
+      required: false
