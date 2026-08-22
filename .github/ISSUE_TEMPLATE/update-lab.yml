@@ -52,8 +52,6 @@ body:
       description: "Name of the faculty member or instructor leading this lab."
       options: 
         - "-- New Lab --"
-    validations:
-      required: false
 
   - type: dropdown
     id: update_strategy
