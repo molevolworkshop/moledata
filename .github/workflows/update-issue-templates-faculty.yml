@@ -95,8 +95,8 @@ jobs:
               let templateContent = fs.readFileSync(target.path, 'utf8');
               const optionsYaml = currentOptions.map(opt => `        - "${opt}"`).join('\n');
 
-              // Strict scoped regex: stops immediately at the next field property or next form element
-              const regex = new RegExp(`(    id: ${target.fieldId}[\\s\\S]*?      options:\\n)([\\s\\S]*?)(?=\\n    (description|validations|placeholder):|\\n  - type:|$)`);
+              // Anchor explicitly to the specific field ID and match its options safely
+              const regex = new RegExp(`(- type:\\s*dropdown\\s+id:\\s*${target.fieldId}[\\s\\S]*?options:\\n)([\\s\\S]*?)(?=\\n    (description|validations|placeholder):|\\n  - type:|$)`);
 
               if (regex.test(templateContent)) {
                 templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
