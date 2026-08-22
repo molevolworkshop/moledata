@@ -1,4 +1,4 @@
-name: Update Lecture Issue Template - Lecture
+name: "Update Issue Templates - Lectures/Labs"
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: update-materials-template-${{ github.ref }}
+  group: update-issue-templates-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  update-template:
+  update-templates:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,17 +20,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Update Lecture Options
+      - name: Update Lecture and Lab Options from Registry
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
 
-            const templatePath = '.github/ISSUE_TEMPLATE/update-lecture.yml';
             const csvPath = '_data/materials-registry.csv';
 
-            // 1. Parse CSV to build lecture options (excluding labs)
-            const options = ['-- New Lecture --'];
+            const lectureOptions = ['-- New Lecture --'];
+            const labOptions = ['-- New Lab --'];
+
+            // Parse CSV and separate items by category
             if (fs.existsSync(csvPath)) {
               const fileContent = fs.readFileSync(csvPath, 'utf8');
               const lines = fileContent.split(/\r?\n/);
@@ -47,41 +48,72 @@ jobs:
                     const cols = line.split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
                     const itemId = cols[idIndex];
                     const title = cols[titleIndex];
-                    const category = categoryIndex !== -1 ? cols[categoryIndex] : 'lecture';
+                    const category = categoryIndex !== -1 ? cols[categoryIndex].toLowerCase() : 'lecture';
 
-                    // Only include if it has an ID, a title, and is a lecture
-                    if (itemId && title && category === 'lecture') {
-                      options.push(`${itemId}: ${title}`);
+                    if (itemId && title) {
+                      const formattedOpt = `${itemId}: ${title}`;
+                      if (category === 'lab') {
+                        if (!labOptions.includes(formattedOpt)) {
+                          labOptions.push(formattedOpt);
+                        }
+                      } else {
+                        // Defaults to lecture if category is 'lecture' or unspecified
+                        if (!lectureOptions.includes(formattedOpt)) {
+                          lectureOptions.push(formattedOpt);
+                        }
+                      }
                     }
                   }
                 }
               }
             }
 
-            let templateContent = fs.readFileSync(templatePath, 'utf8');
-            const optionsYaml = options.map(opt => `        - "${opt}"`).join('\n');
+            // Target configurations for both templates
+            const targets = [
+              {
+                path: '.github/ISSUE_TEMPLATE/update-lecture.yml',
+                fieldId: 'select_lecture',
+                options: lectureOptions,
+                name: 'lecture'
+              },
+              {
+                path: '.github/ISSUE_TEMPLATE/update-lab.yml',
+                fieldId: 'lab_select',
+                options: labOptions,
+                name: 'lab'
+              }
+            ];
 
-            // Match options section under id: select_lecture using regex
-            const regex = /(    id: select_lecture[\s\S]*?      options:\n)([\s\S]*?)(?=\n  - type:|$)/;
-            
-            if (regex.test(templateContent)) {
-              templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
-              fs.writeFileSync(templatePath, templateContent, 'utf8');
-              console.log('Successfully updated lecture template options (excluding labs).');
-            } else {
-              core.setFailed('Could not locate select_lecture options block in the template.');
-            }
+            targets.forEach(target => {
+              if (!fs.existsSync(target.path)) {
+                console.log(`Template not found: ${target.path}, skipping.`);
+                return;
+              }
 
-      - name: Commit and Push Changes if Template Updated
+              let templateContent = fs.readFileSync(target.path, 'utf8');
+              const optionsYaml = target.options.map(opt => `        - "${opt}"`).join('\n');
+
+              const regex = new RegExp(`(    id: ${target.fieldId}[\\s\\S]*?      options:\\n)([\\s\\S]*?)(?=\\n  - type:|$)`);
+
+              if (regex.test(templateContent)) {
+                templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
+                fs.writeFileSync(target.path, templateContent, 'utf8');
+                console.log(`Successfully updated ${target.name} template options.`);
+              } else {
+                console.log(`Could not locate field ID '${target.fieldId}' in ${target.path}`);
+              }
+            });
+
+      - name: Commit and Push Changes if Templates Updated
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.io"
           
-          git add .github/ISSUE_TEMPLATE/update-lecture.yml
+          git add .github/ISSUE_TEMPLATE/update-lecture.yml .github/ISSUE_TEMPLATE/update-lab.yml
           
           if git diff --staged --quiet; then
-            echo "No changes to the issue template required."
+            echo "No changes to the issue templates required."
           else
-            git commit -m "chore: auto-update lecture options from materials registry (excluding labs)"
+            git commit -m "chore: auto-update lecture and lab options from materials-registry.csv"
             git push
           fi
