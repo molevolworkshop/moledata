@@ -30,7 +30,7 @@ body:
     validations:
       required: false
 
-  - type: input
+  - type: dropdown
     id: responsible_faculty
     attributes:
       label: "Responsible Faculty / Author"
@@ -45,31 +45,8 @@ body:
       label: "Update Strategy"
       description: "How should existing files in the target lab directory be handled?"
       options:
-        - "Peter Beerli : peter-beerli"
-        - "Joseph Bielawski : joseph-bielawski"
-        - "Jeremy Brown : jeremy-brown"
-        - "Belinda Chang : belinda-chang"
-        - "Scott Edwards : scott-edwards"
-        - "Laura Eme : laura-eme"
-        - "Mandev Gill : mandev-gill"
-        - "Tracy Heath : tracy-heath"
-        - "Lacey Knowles : lacey-knowles"
-        - "Laura Kubatko : laura-kubatko"
-        - "Emily Jane McTavish : emily-jane-mctavish"
-        - "Corrie Moreau : corrie-moreau"
-        - "Claudia Solís-Lemus : claudia-solis-lemus"
-        - "Megan Smith : megan-smith"
-        - "David Swofford : david-swofford"
-        - "Rosana Zenil-Ferguson : rosana-zenil-ferguson"
-        - "Joshua Justison : joshua-justison"
-        - "Analisa Milkey : analisa-milkey"
-        - "Solomon McShea : solomon-mcshea"
-        - "Thao Nguyen : thao-nguyen"
-        - "Anne Smith : anne-smith"
-        - "-- Not Listed / Write-in --"
-        - "Other"
-        - "TAs"
-        - "NA"
+        - "Keep existing files (default)"
+        - "Delete existing files and replace completely"
 
   - type: textarea
     id: lab_readme
@@ -86,19 +63,71 @@ body:
   # LAB FILES & ATTACHMENTS
   # ---------------------------------------------------------
   - type: textarea
-    id: lab_materials
+    id: master_archive
     attributes:
-      label: "Primary Lab Document / Notebook"
-      description: "Drag and drop a primary file (like an RMarkdown, Jupyter Notebook, PDF, or script) directly here."
-      placeholder: "Drag and drop your file here..."
+      label: "Master Lab Archive (.zip, .tar.gz)"
+      description: "Optionally drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If lab materials are uploaded this way, you may leave the following prompts blank"
+      placeholder: "Drag and drop a master .zip archive here..."
     validations:
       required: false
 
+
+  -- type: textarea
+    id: lab_installation
+    attributes:
+      label: "Installation & Dependencies"
+      description: "List required R/Julia packages, software dependencies, or installation instructions."
+      placeholder: |
+        ```julia
+        using Pkg
+        Pkg.add("PhyloNetworks")
+        ```
+    validations:
+      required: false
+
+  # ---------------------------------------------------------
+  # SCRIPTS & CODE
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_scripts
+    attributes:
+      label: "Scripts & Code Files"
+      description: "Drag and drop script files (.jl, .R, .py, .sh) or paste script content here. (Will go into a `scripts/` folder)."
+      placeholder: "Drag and drop your script files here..."
+    validations:
+      required: false
+
+  # ---------------------------------------------------------
+  # DATA FILES
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_data
+    attributes:
+      label: "Datasets & Input Files"
+      description: "Drag and drop input data files (e.g., fasta, csv, nwk, nexus). (Will go into a `data/` folder)."
+      placeholder: "Drag and drop your dataset files here..."
+    validations:
+      required: false
+
+  # ---------------------------------------------------------
+  # OUTPUTS / EXPECTED RESULTS
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_outputs
+    attributes:
+      label: "Output Files & Expected Results"
+      description: "Drag and drop expected outputs, trees, or result logs if applicable. (Will go into an `outputs/` folder)."
+      placeholder: "Drag and drop output files here..."
+    validations:
+      required: false
+
+  # ---------------------------------------------------------
+  # OTHER MATERIALS
+  # ---------------------------------------------------------
   - type: textarea
     id: additional_files
     attributes:
-      label: "Additional Data Files & Attachments"
-      description: "Drop any supplementary datasets, alignment files, or extra scripts needed for the lab."
-      placeholder: "Drag and drop additional files here..."
+      label: "Other Materials & Attachments"
+      description: "Drop any additional slides, documents, or supplementary files that don't fit above."
+      placeholder: "Drag and drop other files here..."
     validations:
-      required: false
