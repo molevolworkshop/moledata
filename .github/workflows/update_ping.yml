@@ -8,9 +8,18 @@ jobs:
   ping-website:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: molevolworkshop
+          repositories: molevolworkshop.github.io
+
       - name: Trigger Website Rebuild
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.PAT_TO_TRIGGER_WEBSITE }} 
+          token: ${{ steps.generate-token.outputs.token }} 
           repository: molevolworkshop/molevolworkshop.github.io
           event-type: moledata-updated
