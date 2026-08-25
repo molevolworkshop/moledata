@@ -333,6 +333,10 @@ jobs:
             core.exportVariable('LAB_SLUG', newSlug);
             core.exportVariable('LAB_TITLE', labTitle);
 
+      - name: Stage Deletions and Changes in Git
+        run: |
+          git add -A labs/
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
