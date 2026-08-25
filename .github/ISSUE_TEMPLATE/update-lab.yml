@@ -85,17 +85,12 @@ body:
     validations:
       required: false
 
-
   - type: textarea
     id: lab_installation
     attributes:
       label: "Installation & Dependencies"
-      description: "List required R/Julia packages, software dependencies, or installation instructions."
-      placeholder: |
-        ```julia
-        using Pkg
-        Pkg.add("PhyloNetworks")
-        ```
+      description: "List files needed in installation.md. Optionally include a bash script installation.sh that has the commands for installation."
+      placeholder: "Drag and drop your script files here..."
     validations:
       required: false
 

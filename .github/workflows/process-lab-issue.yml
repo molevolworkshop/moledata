@@ -1,0 +1,354 @@
+name: Process Lab Materials Issue
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  process-lab:
+    if: contains(github.event.issue.labels.*.name, 'lab-update')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: molevolworkshop
+          repositories: "molevolworkshop.github.io, moledata"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          lfs: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Process Issue and Generate Lab Materials
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const { execSync } = require('child_process');
+
+            const issueBody = context.payload.issue.body || '';
+
+            const parseIssueBody = (body) => {
+              const fields = {};
+              const sections = body.split(/^###\s+/m);
+              for (const section of sections) {
+                if (!section.trim()) continue;
+                const lines = section.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+                if (lines.length === 0) continue;
+                const label = lines[0];
+                const value = lines.slice(1).join('\n').trim();
+                fields[label] = value;
+              }
+              return fields;
+            };
+
+            const issueFields = parseIssueBody(issueBody);
+
+            const getFieldValue = (label) => {
+              const val = issueFields[label] || '';
+              if (val === '_No response_' || val === 'None' || !val) return '';
+              return val;
+            };
+
+            // --- Get Form Fields ---
+            const selectedLab = getFieldValue('Select Lab to Update (or choose New)');
+            const labTitleInput = getFieldValue('Lab Title');
+            const rawLecturer = getFieldValue('Responsible Faculty / Author');
+            const updateStrategy = getFieldValue('Update Strategy');
+            const readmeContent = getFieldValue('Lab README Content (Markdown)');
+            const masterArchiveField = getFieldValue('Master Lab Archive (.zip, .tar.gz)');
+            const installationField = getFieldValue('Installation & Dependencies');
+            const scriptsField = getFieldValue('Scripts & Code Files');
+            const dataField = getFieldValue('Datasets & Input Files');
+            const outputsField = getFieldValue('Output Files & Expected Results');
+            const additionalFilesField = getFieldValue('Other Materials & Attachments');
+
+            // --- Extract Author ID/Name ---
+            let lecturer = '';
+            if (rawLecturer) {
+              const colonIdx = rawLecturer.indexOf(':');
+              if (colonIdx !== -1) {
+                lecturer = rawLecturer.substring(colonIdx + 1).trim();
+              } else {
+                lecturer = rawLecturer.trim();
+              }
+            }
+
+            // --- Determine Old Slug and New Slug ---
+            let oldSlug = '';
+            let labTitle = '';
+
+            if (selectedLab && selectedLab !== '-- New Lab --') {
+              const colonIdx = selectedLab.indexOf(':');
+              if (colonIdx !== -1) {
+                oldSlug = selectedLab.substring(0, colonIdx).trim();
+                labTitle = selectedLab.substring(colonIdx + 1).trim();
+              } else {
+                oldSlug = selectedLab.trim();
+              }
+            }
+
+            let newSlug = oldSlug;
+            if (labTitleInput) {
+              labTitle = labTitleInput;
+              newSlug = labTitleInput.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+            }
+
+            if (!newSlug) {
+              core.setFailed("A valid lab must be selected from the dropdown or a title must be provided.");
+              return;
+            }
+
+            if (!labTitle) {
+              labTitle = newSlug;
+            }
+
+            console.log(`Old slug: ${oldSlug}, New slug: ${newSlug}, Title: ${labTitle}, Author: ${lecturer}`);
+
+            // --- Setup Target Directories ---
+            const oldDir = oldSlug ? path.join(process.cwd(), 'labs', oldSlug) : '';
+            const labDir = path.join(process.cwd(), 'labs', newSlug);
+
+            if (oldSlug && oldSlug !== newSlug && fs.existsSync(oldDir)) {
+              console.log(`Slug changed from ${oldSlug} to ${newSlug}. Moving existing directory...`);
+              if (!fs.existsSync(path.dirname(labDir))) {
+                fs.mkdirSync(path.dirname(labDir), { recursive: true });
+              }
+              fs.renameSync(oldDir, labDir);
+              console.log(`Successfully moved ${oldDir} to ${labDir}`);
+            } else if (!fs.existsSync(labDir)) {
+              fs.mkdirSync(labDir, { recursive: true });
+            }
+
+            // --- Handle Update Strategy ---
+            const shouldClear = updateStrategy.includes('Delete existing files');
+            if (shouldClear) {
+              console.log(`Clearing existing files in ${labDir} per update strategy...`);
+              const existingFiles = fs.readdirSync(labDir);
+              for (const file of existingFiles) {
+                const curPath = path.join(labDir, file);
+                if (fs.lstatSync(curPath).isDirectory()) {
+                  fs.rmSync(curPath, { recursive: true, force: true });
+                } else {
+                  fs.unlinkSync(curPath);
+                }
+                console.log(`Deleted old: ${file}`);
+              }
+            }
+
+            // --- Helper to extract URLs from markdown links ---
+            const extractUrls = (text) => {
+              const urlRegex = /\[([^\]]+)\]\((https:\/\/[^\)]+)\)/g;
+              const files = [];
+              let match;
+              while ((match = urlRegex.exec(text)) !== null) {
+                files.push({ name: match[1], url: match[2] });
+              }
+              return files;
+            };
+
+            // --- Download helper ---
+            const downloadFile = async (fileUrl, outputPath) => {
+              const res = await fetch(fileUrl);
+              if (!res.ok) throw new Error(`Failed to fetch ${fileUrl}: ${res.statusText}`);
+              const buffer = Buffer.from(await res.arrayBuffer());
+              fs.writeFileSync(outputPath, buffer);
+            };
+
+            // --- Handle Master Archive (.zip / .tar.gz) ---
+            const masterFiles = extractUrls(masterArchiveField);
+            if (masterFiles.length > 0) {
+              const archive = masterFiles[0];
+              const tempArchivePath = path.join(process.cwd(), `temp_${Date.now()}${path.extname(archive.name)}`);
+              console.log(`Downloading master archive from ${archive.url}...`);
+              await downloadFile(archive.url, tempArchivePath);
+              console.log(`Extracting archive into ${labDir}...`);
+              try {
+                if (archive.name.endsWith('.zip')) {
+                  execSync(`unzip -o "${tempArchivePath}" -d "${labDir}"`);
+                } else if (archive.name.endsWith('.tar.gz') || archive.name.endsWith('.tgz')) {
+                  execSync(`tar -xzf "${tempArchivePath}" -C "${labDir}"`);
+                }
+              } finally {
+                if (fs.existsSync(tempArchivePath)) fs.unlinkSync(tempArchivePath);
+              }
+            }
+
+
+            // --- Unified Helper for Field Processing (Files or Archives) ---
+            const processFieldFiles = async (fieldValue, targetSubDir) => {
+              const files = extractUrls(fieldValue);
+              if (files.length === 0) return;
+
+              const subDirPath = targetSubDir ? path.join(labDir, targetSubDir) : labDir;
+              
+              for (const fileObj of files) {
+                const ext = path.extname(fileObj.name).toLowerCase();
+                const isArchive = ext === '.zip' || fileObj.name.endsWith('.tar.gz') || ext === '.tgz';
+
+                if (isArchive) {
+                  // If it's a zipped/tarred archive, extract its contents directly into the target directory
+                  if (!fs.existsSync(subDirPath)) {
+                    fs.mkdirSync(subDirPath, { recursive: true });
+                  }
+                  const tempArchivePath = path.join(process.cwd(), `temp_${targetSubDir || 'root'}_${Date.now()}${ext}`);
+                  console.log(`Downloading archive for ${targetSubDir || 'root'} from ${fileObj.url}...`);
+                  await downloadFile(fileObj.url, tempArchivePath);
+                  console.log(`Extracting archive into ${subDirPath}...`);
+                  try {
+                    if (fileObj.name.endsWith('.zip')) {
+                      execSync(`unzip -o "${tempArchivePath}" -d "${subDirPath}"`);
+                    } else {
+                      execSync(`tar -xzf "${tempArchivePath}" -C "${subDirPath}"`);
+                    }
+                  } finally {
+                    if (fs.existsSync(tempArchivePath)) fs.unlinkSync(tempArchivePath);
+                  }
+                } else {
+                  // Regular individual file upload
+                  if (!fs.existsSync(subDirPath)) {
+                    fs.mkdirSync(subDirPath, { recursive: true });
+                  }
+                  const targetPath = path.join(subDirPath, fileObj.name);
+                  console.log(`Downloading file to ${targetPath}...`);
+                  await downloadFile(fileObj.url, targetPath);
+                }
+              }
+            };
+
+            // --- Process All Structured Fields Uniformly ---
+            await processFieldFiles(installationField, 'installation');
+            await processFieldFiles(scriptsField, 'scripts');
+            await processFieldFiles(dataField, 'data');
+            await processFieldFiles(outputsField, 'outputs');
+            await processFieldFiles(additionalFilesField, ''); // Goes straight to root lab directory
+
+
+
+            // --- Write README.md if provided ---
+            if (readmeContent) {
+              const readmePath = path.join(labDir, 'README.md');
+              fs.writeFileSync(readmePath, readmeContent, 'utf8');
+              console.log(`Saved README.md for ${newSlug}`);
+            }
+
+            // --- Update or Create _data/materials-registry.csv ---
+            const dataDir = path.join(process.cwd(), '_data');
+            if (!fs.existsSync(dataDir)) {
+              fs.mkdirSync(dataDir, { recursive: true });
+            }
+            const registryPath = path.join(dataDir, 'materials-registry.csv');
+
+            let registryRows = [];
+            let headers = ['item_id', 'category', 'title', 'presenter', 'material_location'];
+
+            if (fs.existsSync(registryPath)) {
+              try {
+                const content = fs.readFileSync(registryPath, 'utf8').trim();
+                const lines = content.split('\n');
+                headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
+                registryRows = lines.slice(1).map(r => r.split(',').map(v => v.trim().replace(/['"]/g, '')));
+              } catch (e) {
+                console.log("Could not parse existing registry, creating a new one.");
+              }
+            }
+
+            if (!headers.includes('item_id')) {
+              headers = ['item_id', 'category', 'title', 'presenter', 'material_location'];
+            }
+
+            const itemIdIdx = headers.indexOf('item_id');
+
+            let updatedRows = registryRows.filter(row => {
+              const rowId = itemIdIdx !== -1 ? row[itemIdIdx] : '';
+              if (oldSlug && oldSlug !== newSlug && rowId === oldSlug) {
+                return false;
+              }
+              return true;
+            });
+
+            let found = false;
+            const newEntry = {
+              item_id: newSlug,
+              category: 'lab',
+              title: labTitle,
+              presenter: lecturer,
+              material_location: ''
+            };
+
+            updatedRows = updatedRows.map(row => {
+              const rowId = itemIdIdx !== -1 ? row[itemIdIdx] : '';
+              if (rowId === newSlug) {
+                found = true;
+                return headers.map(h => {
+                  if (h === 'material_location') return newEntry[h];
+                  return newEntry[h] || row[headers.indexOf(h)] || '';
+                });
+              }
+              return row;
+            });
+
+            if (!found) {
+              const rowValues = headers.map(h => `"${(newEntry[h] || '').replace(/"/g, '""')}"`);
+              updatedRows.push(rowValues);
+            } else {
+              updatedRows = updatedRows.map(row => (Array.isArray(row) ? headers.map(h => `"${(row[headers.indexOf(h)] || '').replace(/"/g, '""')}"`).join(',') : row));
+            }
+
+            const finalCsvContent = [headers.join(','), ...(found ? updatedRows : updatedRows.map(r => Array.isArray(r) ? r.join(',') : r))].join('\n') + '\n';
+            fs.writeFileSync(registryPath, finalCsvContent, 'utf8');
+            console.log("Updated materials-registry.csv for lab");
+
+            // --- Export Variables for PR Step ---
+            core.exportVariable('LAB_SLUG', newSlug);
+            core.exportVariable('LAB_TITLE', labTitle);
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          commit-message: "update lab materials: ${{ env.LAB_TITLE }}"
+          title: "Lab Materials Update: ${{ env.LAB_TITLE }}"
+          body: |
+            Automated lab material update generated from Issue #${{ github.event.issue.number }}.
+            
+            * **Lab:** ${{ env.LAB_TITLE }} (`${{ env.LAB_SLUG }}`)
+            * **Target Directory:** `labs/${{ env.LAB_SLUG }}/`
+            * **Registry Updated:** `_data/materials-registry.csv`
+            
+            Closes #${{ github.event.issue.number }}
+          branch: "update-lab/${{ env.LAB_SLUG }}"
+          base: "main"
+          delete-branch: true
+          add-paths: |
+            labs/
+            _data/materials-registry.csv
+
+      - name: Comment on Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Thanks @${context.actor}! An automated Pull Request has been generated for your lab materials update. Organizers will review and merge it shortly.`
+            })
