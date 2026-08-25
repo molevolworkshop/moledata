@@ -334,7 +334,7 @@ jobs:
             core.exportVariable('LAB_TITLE', labTitle);
 
       
-      - name: Push Branch and Create Pull Request
+      - name: Push Branch and Create/Update Pull Request
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
@@ -347,17 +347,25 @@ jobs:
           
           git push origin "update-lab/${{ env.LAB_SLUG }}" --force
           
-          gh pr create \
-            --base "main" \
-            --head "update-lab/${{ env.LAB_SLUG }}" \
-            --title "Lab Materials Update: ${{ env.LAB_TITLE }}" \
-            --body "Automated lab material update generated from Issue #${{ github.event.issue.number }}.
+          # Check if an open PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head "update-lab/${{ env.LAB_SLUG }}" --state open --json number --jq '.[0].number')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create \
+              --base "main" \
+              --head "update-lab/${{ env.LAB_SLUG }}" \
+              --title "Lab Materials Update: ${{ env.LAB_TITLE }}" \
+              --body "Automated lab material update generated from Issue #${{ github.event.issue.number }}.
 
-            * **Lab:** ${{ env.LAB_TITLE }} (\`${{ env.LAB_SLUG }}\`)
-            * **Target Directory:** \`labs/${{ env.LAB_SLUG }}/\`
-            * **Registry Updated:** \`_data/materials-registry.csv\`
+              * **Lab:** ${{ env.LAB_TITLE }} (\`${{ env.LAB_SLUG }}\`)
+              * **Target Directory:** \`labs/${{ env.LAB_SLUG }}/\`
+              * **Registry Updated:** \`_data/materials-registry.csv\`
 
-            Closes #${{ github.event.issue.number }}"
+              Closes #${{ github.event.issue.number }}"
+            echo "Created new Pull Request."
+          else
+            echo "Pull Request #$EXISTING_PR already exists. The pushed changes have automatically updated the existing PR."
+          fi
       
       - name: Comment on Issue
         uses: actions/github-script@v7
