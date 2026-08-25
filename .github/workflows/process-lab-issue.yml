@@ -238,15 +238,26 @@ jobs:
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
             await processFieldFiles(outputsField, 'outputs');
-            await processFieldFiles(additionalFilesField, ''); // Goes straight to root lab directory
+            await processFieldFiles(additionalFilesField, 'other-materials');
 
 
 
-            // --- Write README.md if provided ---
+            // --- Write or Download README.md ---
             if (readmeContent) {
+              const readmeFiles = extractUrls(readmeContent);
               const readmePath = path.join(labDir, 'README.md');
-              fs.writeFileSync(readmePath, readmeContent, 'utf8');
-              console.log(`Saved README.md for ${newSlug}`);
+
+              if (readmeFiles.length > 0) {
+                // Case A: A file was uploaded/dragged into the README field
+                const fileObj = readmeFiles[0];
+                console.log(`Downloading uploaded README file from ${fileObj.url}...`);
+                await downloadFile(fileObj.url, readmePath);
+                console.log(`Saved uploaded file as README.md for ${newSlug}`);
+              } else {
+                // Case B: Plain text or markdown was typed/pasted directly into the box
+                fs.writeFileSync(readmePath, readmeContent, 'utf8');
+                console.log(`Saved typed README text for ${newSlug}`);
+              }
             }
 
             // --- Update or Create _data/materials-registry.csv ---
