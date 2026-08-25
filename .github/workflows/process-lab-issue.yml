@@ -142,24 +142,17 @@ jobs:
             }
 
             // --- Handle Update Strategy ---
-            // --- Handle Update Strategy ---
+            console.log("Raw Update Strategy:", JSON.stringify(updateStrategy));
             const shouldClear = updateStrategy.includes('Delete existing files');
+
             if (shouldClear && fs.existsSync(labDir)) {
-              console.log(`Clearing existing files in ${labDir} per update strategy...`);
-              try {
-                const existingFiles = fs.readdirSync(labDir);
-                for (const file of existingFiles) {
-                  const curPath = path.join(labDir, file);
-                  if (fs.lstatSync(curPath).isDirectory()) {
-                    fs.rmSync(curPath, { recursive: true, force: true });
-                  } else {
-                    fs.unlinkSync(curPath);
-                  }
-                  console.log(`Deleted old: ${file}`);
-                }
-              } catch (err) {
-              console.log(`Error clearing directory: ${err.message}`);
-              }
+              console.log(`Removing entire directory ${labDir}...`);
+              fs.rmSync(labDir, { recursive: true, force: true });
+            }
+
+            // Recreate the directory fresh
+            if (!fs.existsSync(labDir)) {
+              fs.mkdirSync(labDir, { recursive: true });
             }
 
             // --- Helper to extract URLs from markdown links ---
