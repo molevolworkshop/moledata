@@ -13,6 +13,15 @@ body:
   # ---------------------------------------------------------
   # SELECTION & STRATEGY
   # ---------------------------------------------------------
+  
+  ### File Attachments & Uploads
+
+Please ensure any uploaded files thru this issue template use a github [accepted](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files) format. 
+
+* **Unsupported Formats:** If your file type is not directly accepted, please **zip the archive (.zip)** before attaching it to this issue.
+ Alternatively, if the file is already on GitHub, you can directly provide a link to the 'raw' file.
+ For example, if you wanted to upload the R file contained here `https://github.com/trayc7/MidwestPhylo2019/blob/master/docs/class/diversification/1.general_diversification.R`, you would add a line in the text box like this [myfile.R](https://raw.githubusercontent.com/trayc7/MidwestPhylo2019/refs/heads/master/docs/class/diversification/1.general_diversification.R).
+  
   - type: dropdown
     id: lab_select
     attributes:
