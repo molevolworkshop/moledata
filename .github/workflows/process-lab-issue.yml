@@ -333,36 +333,32 @@ jobs:
             core.exportVariable('LAB_SLUG', newSlug);
             core.exportVariable('LAB_TITLE', labTitle);
 
-      - name: Commit Lab Changes
+      
+      - name: Push Branch and Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Create and checkout a dedicated branch for this lab update
           git checkout -B "update-lab/${{ env.LAB_SLUG }}"
-          
-          # Stage all additions, modifications, and deletions
           git add -A labs/ _data/materials-registry.csv
-          
-          # Commit if there are any changes
           git diff --staged --quiet || git commit -m "update lab materials: ${{ env.LAB_TITLE }}"
+          
+          git push origin "update-lab/${{ env.LAB_SLUG }}" --force
+          
+          gh pr create \
+            --base "main" \
+            --head "update-lab/${{ env.LAB_SLUG }}" \
+            --title "Lab Materials Update: ${{ env.LAB_TITLE }}" \
+            --body "Automated lab material update generated from Issue #${{ github.event.issue.number }}.
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          branch: "update-lab/${{ env.LAB_SLUG }}"
-          base: "main"
-          title: "Lab Materials Update: ${{ env.LAB_TITLE }}"
-          body: |
-            Automated lab material update generated from Issue #${{ github.event.issue.number }}.
-            
-            * **Lab:** ${{ env.LAB_TITLE }} (`${{ env.LAB_SLUG }}`)
-            * **Target Directory:** `labs/${{ env.LAB_SLUG }}/`
-            * **Registry Updated:** `_data/materials-registry.csv`
-            
-            Closes #${{ github.event.issue.number }}
-          delete-branch: true
+            * **Lab:** ${{ env.LAB_TITLE }} (\`${{ env.LAB_SLUG }}\`)
+            * **Target Directory:** \`labs/${{ env.LAB_SLUG }}/\`
+            * **Registry Updated:** \`_data/materials-registry.csv\`
+
+            Closes #${{ github.event.issue.number }}"
+      
       - name: Comment on Issue
         uses: actions/github-script@v7
         with:
