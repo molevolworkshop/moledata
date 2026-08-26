@@ -1,10 +1,5 @@
 ---
-layout: page
-title: General Alignment Background
-permalink: /labs/alignment/general-background/
 ---
-[Return to alignment lab](/labs/alignment/)
-
 Multiple sequence alignment (MSA) is a crucial first step for most
 methods of phylogenetic estimation or model-based inference of
 evolutionary processes. The goal of MSA is to introduce gaps into

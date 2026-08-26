@@ -1,9 +1,5 @@
 ---
-layout: page
-title: MUSCLE Background
-permalink: /labs/alignment/MUSCLE-background/
 ---
-[Return to alignment lab](/labs/alignment/)
 
 Muscle is described in
 [Edgar et al.

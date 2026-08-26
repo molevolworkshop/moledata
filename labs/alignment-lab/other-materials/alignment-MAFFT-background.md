@@ -1,9 +1,6 @@
 ---
-layout: page
-title: MAFFT Background
-permalink: /labs/alignment/MAFFT-background/
 ---
-[Return to alignment lab](/labs/alignment/)
+
 
 MAFFT gets its name from its use of Fast Fourier Transform to quickly
 identify some of the more obvious regions of homology. After identifying

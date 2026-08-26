@@ -1,7 +1,4 @@
---- 
-layout: lab 
-title: Alignment Lab  
---- 
+# Alignment Lab
 
 ## Expected learning outcomes
 
