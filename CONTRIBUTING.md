@@ -31,7 +31,7 @@ For a given lecture topic the specific materials should be in the appropriate fo
 There are two things we desire in this folder:
 
 1. **The lecture itself**: This should be a PDF with the slides for the lecture (e.g., `/lectures/lecture_id/lecture_id.pdf`). If the lecture contains multiple presentations, please create a separate topic for each segment. 
-2. A **README.md** file that contains a brief overview of the topic, learning objectives, and any relevant attribution (if relevant).
+2. A `README.md` file that contains a brief overview of the topic, learning objectives, and any relevant attribution (if relevant).
 
 Extra files that go with a talk (a script, a small dataset) go in the **same folder**.
 Please see [Naming](#naming-conventions) for naming conventions.
@@ -42,11 +42,12 @@ Note that large files and PDFs are stored with Git LFS, so check [Git LFS](#one-
 Put your files in `labs/lab_id`.
 If stored on-site, lab materials folders should have this structure:
 
-- A **README.md** that contains the actual lab itself and instructions for running thru the lab. These can use markdown formatting for 
-- A **/scripts/** folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis by directly by calling the relevant scripts without having to move move or reformat any files (requiring intermediate files from previous analyses is fine).
-- A **/data/** folder that contains all relevant files needed for analyses. 
-- An **/output/** that stores any generated output from the analyses ran in the **/scripts/** folder and may be pre-populated with intermediate results or pre-given sample outputs. 
-- Any other files that might be relevant to the lab (additional markdowns, reading, references, related lab exercises, etc.) can be stored in additional folders or at the base directory for the lab.
+- A `README.md` that contains the actual lab itself and instructions for running thru the lab. These can use markdown formatting for 
+- A `/scripts/` folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis by directly by calling the relevant scripts without having to move move or reformat any files (requiring intermediate files from previous analyses is fine).
+- A `/data/` folder that contains all relevant files needed for analyses. 
+- An `/output/` that stores any generated output from the analyses ran in the **/scripts/** folder and may be pre-populated with intermediate results or pre-given sample outputs. 
+- An `/assets/` folder that contains any images used in the tutorials.
+- Any other files that might be relevant to the lab (additional markdowns, reading, references, related lab exercises, etc.) can be stored in **/other-materials/**.
 The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issues/new?template=update-lab.yml) is great for automatically uploading your materials while following these conventions
 
 ---
@@ -54,8 +55,7 @@ The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issu
 ## Naming conventions
 
 - `item_id`'s should use slug casing, i.e., lowercase words separated by hyphens.
-- Slides should be named after the item_id and stored in a folder of the same name. E.g., `lectures/intro-phylogenetics/intro-phylogenetics.pdf`
-  `beerli`, `solis-lemus`).
+- Slides should be named after the item_id and stored in a folder of the same name. E.g., `lectures/intro-phylogenetics/intro-phylogenetics.pdf`.
 - If giving more than one talk (or a talk is split into multiple parts, each talk should be registered on the `materials-registry.csv` and uploaded separately.
 - **Hosting your slides or labs on Figshare or your own site instead?** Then don't add anything here
   in moledata. Your **link** should to the materials should be put in the `material_location` column of the `registry-materials.csv`

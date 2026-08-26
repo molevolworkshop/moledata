@@ -81,7 +81,9 @@ jobs:
             const scriptsField = getFieldValue('Scripts & Code Files');
             const dataField = getFieldValue('Datasets & Input Files');
             const outputsField = getFieldValue('Output Files & Expected Results');
+            const assetsField = getFieldValue('Assets and Images');
             const additionalFilesField = getFieldValue('Other Materials & Attachments');
+            
 
             // --- Extract Author ID/Name ---
             let lecturer = '';
@@ -238,7 +240,8 @@ jobs:
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
             await processFieldFiles(outputsField, 'outputs');
-            await processFieldFiles(additionalFilesField, '');
+            await processFieldFiles(assetsField, 'assets');
+            await processFieldFiles(additionalFilesField, 'other-materials');
 
 
 

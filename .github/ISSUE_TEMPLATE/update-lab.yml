@@ -154,6 +154,18 @@ Please ensure any uploaded files thru this issue template use a github [accepted
       placeholder: "Drag and drop output files here..."
     validations:
       required: false
+      
+  # ---------------------------------------------------------
+  # Assets
+  # ---------------------------------------------------------
+  - type: textarea
+    id: lab_assets
+    attributes:
+      label: "Assets and Images"
+      description: "Drag and drop any diagrams, pictures, or figures used in tutorials. (Will go into an `assets/` folder)."
+      placeholder: "Drag and drop output files here..."
+    validations:
+      required: false
 
   # ---------------------------------------------------------
   # OTHER MATERIALS
@@ -162,6 +174,6 @@ Please ensure any uploaded files thru this issue template use a github [accepted
     id: additional_files
     attributes:
       label: "Other Materials & Attachments"
-      description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be added directly to the base directory for the lab"
+      description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be put in the other-materials folder
       placeholder: "Drag and drop other files here..."
     validations:
