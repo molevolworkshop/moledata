@@ -42,14 +42,11 @@ Note that large files and PDFs are stored with Git LFS, so check [Git LFS](#one-
 Put your files in `labs/lab_id`.
 If stored on-site, lab materials folders should have this structure:
 
-- A **README.md** that contains the actual lab itself and instructions for running thru the lab.
-- An **index.md** is required for the lab to be generated on the website. This file should automatically be generated as a part of the PR process. 
-- An **/installation** folder that contains a file named `installation.md` that contains a basic description of the software needed (including versions), dependencies, installation instructions, data used, and other relevant information. If possible, this folder should also contain a bash script named `installation.sh` that contains the computer instructions for the installation on a Unix machine. 
+- A **README.md** that contains the actual lab itself and instructions for running thru the lab. These can use markdown formatting for 
 - A **/scripts/** folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis by directly by calling the relevant scripts without having to move move or reformat any files (requiring intermediate files from previous analyses is fine).
 - A **/data/** folder that contains all relevant files needed for analyses. 
 - An **/output/** that stores any generated output from the analyses ran in the **/scripts/** folder and may be pre-populated with intermediate results or pre-given sample outputs. 
-- Any other files that might be relevant to the lab (additional reading, references, related lab exercises, etc.) should be stored in a folder called **/other-materials/**
- 
+- Any other files that might be relevant to the lab (additional markdowns, reading, references, related lab exercises, etc.) can be stored in additional folders or at the base directory for the lab.
 The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issues/new?template=update-lab.yml) is great for automatically uploading your materials while following these conventions
 
 ---

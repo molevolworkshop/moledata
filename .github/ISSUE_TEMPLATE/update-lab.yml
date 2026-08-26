@@ -100,7 +100,7 @@ Please ensure any uploaded files thru this issue template use a github [accepted
     id: lab_readme
     attributes:
       label: "Lab README Content (Markdown)"
-      description: "The primary instructions or overview text for the lab. This will be saved as README.md in the lab directory."
+      description: "The primary contents for the lab. This will be saved as README.md in the lab directory. You either upload a markdown file or populate the textbox directly"
       placeholder: |
         # Lab Overview
         In this lab, we will explore network inference methods...
@@ -116,15 +116,6 @@ Please ensure any uploaded files thru this issue template use a github [accepted
       label: "Master Lab Archive (.zip, .tar.gz)"
       description: "Optionally drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If lab materials are uploaded this way, you may leave the following prompts blank"
       placeholder: "Drag and drop a master .zip archive here..."
-    validations:
-      required: false
-
-  - type: textarea
-    id: lab_installation
-    attributes:
-      label: "Installation & Dependencies"
-      description: "List files needed in installation.md. Optionally include a bash script installation.sh that has the commands for installation."
-      placeholder: "Drag and drop your script files here..."
     validations:
       required: false
 
@@ -171,6 +162,6 @@ Please ensure any uploaded files thru this issue template use a github [accepted
     id: additional_files
     attributes:
       label: "Other Materials & Attachments"
-      description: "Drop any additional slides, documents, or supplementary files that don't fit above."
+      description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be added directly to the base directory for the lab"
       placeholder: "Drag and drop other files here..."
     validations:

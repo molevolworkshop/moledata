@@ -78,7 +78,6 @@ jobs:
             const updateStrategy = getFieldValue('Update Strategy');
             const readmeContent = getFieldValue('Lab README Content (Markdown)');
             const masterArchiveField = getFieldValue('Master Lab Archive (.zip, .tar.gz)');
-            const installationField = getFieldValue('Installation & Dependencies');
             const scriptsField = getFieldValue('Scripts & Code Files');
             const dataField = getFieldValue('Datasets & Input Files');
             const outputsField = getFieldValue('Output Files & Expected Results');
@@ -236,11 +235,10 @@ jobs:
             };
 
             // --- Process All Structured Fields Uniformly ---
-            await processFieldFiles(installationField, 'installation');
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
             await processFieldFiles(outputsField, 'outputs');
-            await processFieldFiles(additionalFilesField, 'other-materials');
+            await processFieldFiles(additionalFilesField, '');
 
 
 
