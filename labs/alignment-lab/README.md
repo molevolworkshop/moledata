@@ -29,9 +29,9 @@ alignment resources are provided at the end of the tutorial.
 If you feel you need more background in MSA before starting the
 tutorial, please consult the pages linked below:
 
-* [General Background](./other-materials/alignment-general-background/) 
-* [MAFFT Background](./other-materials/alignment-MAFFT-background/) 
-* [MUSCLE Background](./other-materials/alignment-MUSCLE-background/)
+* [General Background](./other-materials/alignment-general-background.md) 
+* [MAFFT Background](./other-materials/alignment-MAFFT-background.md) 
+* [MUSCLE Background](./other-materials/alignment-MUSCLE-background.md)
 
 ## Getting started
 
