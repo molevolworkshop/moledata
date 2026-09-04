@@ -10,23 +10,17 @@ body:
         Use this form to add a new lab or update existing lab materials, code, or documentation. 
         An automated pull request will be generated upon submission.
 
-  # ---------------------------------------------------------
-  # SELECTION & STRATEGY
-  # ---------------------------------------------------------
-  
-  ### File Attachments & Uploads
-
-- type: markdown
+  - type: markdown
     attributes:
       value: |
         ### File Attachments & Uploads
 
-        Please ensure any uploaded files thru this issue template use a GitHub [accepted](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files) format. 
+        Please ensure any uploaded files through this issue template use a GitHub [accepted](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files) format. 
 
         * **Unsupported Formats:** If your file type is not directly accepted, please **zip the archive (.zip)** before attaching it to this issue.
         Alternatively, if the file is already on GitHub, you can directly provide a link to the 'raw' file.
         For example, if you wanted to upload the R file contained here `https://github.com/trayc7/MidwestPhylo2019/blob/master/docs/class/diversification/1.general_diversification.R`, you would add a line in the text box like this `[myfile.R](https://raw.githubusercontent.com/trayc7/MidwestPhylo2019/refs/heads/master/docs/class/diversification/1.general_diversification.R)`.
-        
+
   - type: dropdown
     id: lab_select
     attributes:
@@ -91,7 +85,6 @@ body:
         - "TAs"
         - "NA"
 
-
   - type: dropdown
     id: update_strategy
     attributes:
@@ -112,9 +105,6 @@ body:
     validations:
       required: false
 
-  # ---------------------------------------------------------
-  # LAB FILES & ATTACHMENTS
-  # ---------------------------------------------------------
   - type: textarea
     id: master_archive
     attributes:
@@ -124,9 +114,6 @@ body:
     validations:
       required: false
 
-  # ---------------------------------------------------------
-  # SCRIPTS & CODE
-  # ---------------------------------------------------------
   - type: textarea
     id: lab_scripts
     attributes:
@@ -136,9 +123,6 @@ body:
     validations:
       required: false
 
-  # ---------------------------------------------------------
-  # DATA FILES
-  # ---------------------------------------------------------
   - type: textarea
     id: lab_data
     attributes:
@@ -148,9 +132,6 @@ body:
     validations:
       required: false
 
-  # ---------------------------------------------------------
-  # OUTPUTS / EXPECTED RESULTS
-  # ---------------------------------------------------------
   - type: textarea
     id: lab_outputs
     attributes:
@@ -159,10 +140,7 @@ body:
       placeholder: "Drag and drop output files here..."
     validations:
       required: false
-      
-  # ---------------------------------------------------------
-  # Assets
-  # ---------------------------------------------------------
+
   - type: textarea
     id: lab_assets
     attributes:
@@ -172,14 +150,11 @@ body:
     validations:
       required: false
 
-  # ---------------------------------------------------------
-  # OTHER MATERIALS
-  # ---------------------------------------------------------
   - type: textarea
     id: additional_files
     attributes:
       label: "Other Materials & Attachments"
-      description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be put in the other-materials folder"
+      description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be put in the other-materials folder."
       placeholder: "Drag and drop other files here..."
     validations:
       required: false
