@@ -177,3 +177,4 @@ Please ensure any uploaded files thru this issue template use a github [accepted
       description: "Drop any additional slides, documents, or supplementary files that don't fit above. Files uploaded here will be put in the other-materials folder"
       placeholder: "Drag and drop other files here..."
     validations:
+      required: false
