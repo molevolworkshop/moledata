@@ -2,8 +2,6 @@ name: Compress PDFs in PR
 
 on:
   push:
-    branches:
-      - 'update-lecture/**'
     paths:
       - '**/*.pdf'
 
