@@ -1,7 +1,7 @@
 # Lectures
 
-Lecture slides, organized **one folder per faculty**: `lectures/<last-name>/`
-(e.g. `lectures/beerli/`). See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to add and
+Lecture slides are organized **one folder per lecture topic**: `lectures/<item_id>/`
+(e.g. `lectures/intro-phylogenetics/`). See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to add and
 name files.
 
 ## Lectures hosted off-site

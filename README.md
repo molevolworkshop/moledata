@@ -1,17 +1,25 @@
 # mole-terials
-year-to-year lecture materials, tutorials, and reproducible software environment for the Wood's Hole course on Molecular Evolution
+Year-to-year lecture materials, tutorials, and reproducible software environment for the Workshop on Molecular Evolution at MBL, Woods Hole.
 
-To reduce the repo size, this repo has [Git Large File Storage](https://git-lfs.com/) enabled for PDFs, zipped folders, and other potentially large binaries. To properly push to this repo you will need git lfs installed on your machine. 
-- The `.gitattributes` file controls the filetypes that are stored via git LFS
+## Repository Structure
+- **[`lectures/`](lectures/)**: Slide decks and overviews for workshop lectures.
+- **[`labs/`](labs/)**: Tutorial data, code scripts, output examples, and lab walkthroughs.
+- **[`_data/materials-registry.csv`](_data/materials-registry.csv)**: Registry mapping each item ID, title, category, presenter, and material location.
+- **[`CONTRIBUTING.md`](CONTRIBUTING.md)**: Instructions for workshop faculty and contributors on adding and updating materials.
 
+## Git Large File Storage (LFS)
+To reduce repository size, this repo uses [Git Large File Storage (LFS)](https://git-lfs.com/) for PDFs, zipped archives, and large dataset binaries.
+Before pushing changes, ensure Git LFS is installed and initialized on your system:
+```bash
+git lfs install
+```
+The [`.gitattributes`](.gitattributes) file specifies all file patterns managed by Git LFS.
 
-# TODO 
-- metadata file for lectures/labs, locations, descriptions, lecturers
-- track traffic/download data
-- publish materials 
-- lab htmls and readme
-- write a scraper for lectures/labs not hosted on GH
-	- submodule for lectures hosted on GH but off site
-	- figshare
-	- decide structure for pulling materials from off site 
+## Progress & Roadmap
+- [x] Metadata registry for lectures and labs (`_data/materials-registry.csv`)
+- [x] Automated GitHub Issue templates & workflows for lecture and lab submission
+- [x] Lab walkthroughs, datasets, and README documentation
+- [ ] Track traffic and download data
+- [ ] Publish archived release packages for each workshop year
+- [ ] Scraper / synchronization for off-site materials (Figshare, external GitHub repos)
 

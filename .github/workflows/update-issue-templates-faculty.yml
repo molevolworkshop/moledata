@@ -27,7 +27,7 @@ jobs:
           path: 'molevolworkshop.github.io'
 
       - name: Update Faculty Options in Both Templates
-        uses: actions/github-script@v9
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');

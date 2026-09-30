@@ -128,8 +128,17 @@ jobs:
             console.log(`Old slug: ${oldSlug}, New slug: ${newSlug}, Title: ${labTitle}, Author: ${lecturer}`);
 
             // --- Setup Target Directories ---
-            const oldDir = oldSlug ? path.join(process.cwd(), 'labs', oldSlug) : '';
-            const labDir = path.join(process.cwd(), 'labs', newSlug);
+            const findExistingDir = (slug) => {
+              if (!slug) return '';
+              const direct = path.join(process.cwd(), 'labs', slug);
+              if (fs.existsSync(direct)) return direct;
+              const underscore = path.join(process.cwd(), 'labs', slug.replace(/-/g, '_'));
+              if (fs.existsSync(underscore)) return underscore;
+              return direct;
+            };
+
+            const oldDir = oldSlug ? findExistingDir(oldSlug) : '';
+            const labDir = findExistingDir(newSlug);
 
             if (oldSlug && oldSlug !== newSlug && fs.existsSync(oldDir)) {
               console.log(`Slug changed from ${oldSlug} to ${newSlug}. Moving existing directory...`);
@@ -239,7 +248,8 @@ jobs:
             // --- Process All Structured Fields Uniformly ---
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
-            await processFieldFiles(outputsField, 'outputs');
+            const outputSubDir = fs.existsSync(path.join(labDir, 'outputs')) ? 'outputs' : 'output';
+            await processFieldFiles(outputsField, outputSubDir);
             await processFieldFiles(assetsField, 'assets');
             await processFieldFiles(additionalFilesField, 'other-materials');
 

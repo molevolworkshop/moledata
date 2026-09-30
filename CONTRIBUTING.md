@@ -9,7 +9,7 @@ Molecular Evolution (MOLE). This page is for faculty adding or updating their ma
 
 Contributions should be done by either creating a GitHub issue or by creating a Pull Request directly.
 We have GitHub issue templates for both [lecture](https://github.com/molevolworkshop/moledata/issues/new?template=update-lecture.yml) and [lab](https://github.com/molevolworkshop/moledata/issues/new?template=update-lab.yml) materials submissions, respectively.
-Filling out these templates is recommended because will automatically format the data, update metadata files as needed, and submit a Pull Request on your behalf. 
+Filling out these templates is recommended because it will automatically format the data, update metadata files as needed, and submit a Pull Request on your behalf. 
 If submitting a Pull Request directly, you will need to fork the [moledata repo](https://github.com/molevolworkshop/moledata) and ensure that your materials are appropriately formatted (see below).
 
  **Don't want to deal with GitHub?** Email your slides or lab files to the workshop
@@ -42,10 +42,10 @@ Note that large files and PDFs are stored with Git LFS, so check [Git LFS](#one-
 Put your files in `labs/lab_id`.
 If stored on-site, lab materials folders should have this structure:
 
-- A `README.md` that contains the actual lab itself and instructions for running thru the lab. These can use markdown formatting for 
-- A `/scripts/` folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis by directly by calling the relevant scripts without having to move move or reformat any files (requiring intermediate files from previous analyses is fine).
+- A `README.md` that contains the actual lab itself and instructions for running through the lab. These can use markdown formatting for rich text, code blocks, images, and links.
+- A `/scripts/` folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis directly by calling the relevant scripts without having to move or reformat any files (requiring intermediate files from previous analyses is fine).
 - A `/data/` folder that contains all relevant files needed for analyses. 
-- An `/output/` that stores any generated output from the analyses ran in the **/scripts/** folder and may be pre-populated with intermediate results or pre-given sample outputs. 
+- An `/output/` (or `/outputs/`) folder that stores any generated output from the analyses run in the **/scripts/** folder and may be pre-populated with intermediate results or sample outputs. 
 - An `/assets/` folder that contains any images used in the tutorials.
 - Any other files that might be relevant to the lab (additional markdowns, reading, references, related lab exercises, etc.) can be stored in **/other-materials/**.
 The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issues/new?template=update-lab.yml) is great for automatically uploading your materials while following these conventions
@@ -56,9 +56,9 @@ The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issu
 
 - `item_id`'s should use slug casing, i.e., lowercase words separated by hyphens.
 - Slides should be named after the item_id and stored in a folder of the same name. E.g., `lectures/intro-phylogenetics/intro-phylogenetics.pdf`.
-- If giving more than one talk (or a talk is split into multiple parts, each talk should be registered on the `materials-registry.csv` and uploaded separately.
+- If giving more than one talk (or a talk is split into multiple parts), each talk should be registered in the `materials-registry.csv` and uploaded separately.
 - **Hosting your slides or labs on Figshare or your own site instead?** Then don't add anything here
-  in moledata. Your **link** should to the materials should be put in the `material_location` column of the `registry-materials.csv`
+  in moledata. Your **link** to the materials should be put in the `material_location` column of `materials-registry.csv`.
 
 ---
 
