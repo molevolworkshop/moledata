@@ -98,7 +98,7 @@ jobs:
               //matches id: lecturer, captures its options, and stops safely at the next form field (- type:)
               const regex = new RegExp(`(id:\\s*${target.fieldId}[\\s\\S]*?options:\\s*\\n)([\\s\\S]*?)(?=\\n\\s*-\\s+type:|$)`);
               if (regex.test(templateContent)) {
-                templateContent = templateContent.replace(regex, `$1${optionsYaml}\n`);
+                templateContent = templateContent.replace(regex, `$1${optionsYaml}`);
                 fs.writeFileSync(target.path, templateContent, 'utf8');
                 console.log(`Successfully updated ${target.fieldId} options in ${target.path}`);
               } else {

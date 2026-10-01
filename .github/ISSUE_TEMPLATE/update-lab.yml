@@ -114,11 +114,18 @@ body:
     validations:
       required: false
 
+  - type: markdown
+    attributes:
+      value: |
+        ### Individual Folder uploads
+        Only upload contents here if you did not upload a zipped archive to the "Master Lab Archive"
+
+
   - type: textarea
     id: lab_scripts
     attributes:
       label: "Scripts & Code Files"
-      description: "Drag and drop script files (.jl, .R, .py, .sh) or paste script content here. (Will go into a `scripts/` folder)."
+      description: "Drag and drop script files here. (Will go into a `scripts/` folder). If certain file types are not permitted, you may zip the entire contents that would go into the folder and place the zipped archive here."
       placeholder: "Drag and drop your script files here..."
     validations:
       required: false
@@ -127,7 +134,7 @@ body:
     id: lab_data
     attributes:
       label: "Datasets & Input Files"
-      description: "Drag and drop input data files (e.g., fasta, csv, nwk, nexus). (Will go into a `data/` folder)."
+      description: "Drag and drop input data files. (Will go into a `data/` folder). If certain file types are not permitted, you may zip the entire contents that would go into the folder and place the zipped archive here."
       placeholder: "Drag and drop your dataset files here..."
     validations:
       required: false
@@ -136,7 +143,7 @@ body:
     id: lab_outputs
     attributes:
       label: "Output Files & Expected Results"
-      description: "Drag and drop expected outputs, trees, or result logs if applicable. (Will go into an `outputs/` folder)."
+      description: "Drag and drop expected outputs, trees, or result logs if applicable. (Will go into an `outputs/` folder). If certain file types are not permitted, you may zip the entire contents that would go into the folder and place the zipped archive here."
       placeholder: "Drag and drop output files here..."
     validations:
       required: false
@@ -145,7 +152,7 @@ body:
     id: lab_assets
     attributes:
       label: "Assets and Images"
-      description: "Drag and drop any diagrams, pictures, or figures used in tutorials. (Will go into an `assets/` folder)."
+      description: "Drag and drop any diagrams, pictures, or figures used in tutorials. (Will go into an `assets/` folder). If certain file types are not permitted, you may zip the entire contents that would go into the folder and place the zipped archive here."
       placeholder: "Drag and drop output files here..."
     validations:
       required: false
