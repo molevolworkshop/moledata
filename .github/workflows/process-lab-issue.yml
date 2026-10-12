@@ -248,7 +248,7 @@ jobs:
             // --- Process All Structured Fields Uniformly ---
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
-            const outputSubDir = fs.existsSync(path.join(labDir, 'outputs')) ? 'outputs' : 'output';
+            await processFieldFiles(outputsField, 'outputs');
             await processFieldFiles(outputsField, outputSubDir);
             await processFieldFiles(assetsField, 'assets');
             await processFieldFiles(additionalFilesField, 'other-materials');

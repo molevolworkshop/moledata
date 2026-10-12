@@ -45,7 +45,7 @@ If stored on-site, lab materials folders should have this structure:
 - A `README.md` that contains the actual lab itself and instructions for running through the lab. These can use markdown formatting for rich text, code blocks, images, and links.
 - A `/scripts/` folder that contains any relevant scripts used in the analysis. Ideally, one should be able to perform a given analysis directly by calling the relevant scripts without having to move or reformat any files (requiring intermediate files from previous analyses is fine).
 - A `/data/` folder that contains all relevant files needed for analyses. 
-- An `/output/` (or `/outputs/`) folder that stores any generated output from the analyses run in the **/scripts/** folder and may be pre-populated with intermediate results or sample outputs. 
+- An  `/outputs/` folder that stores any generated output from the analyses run in the **/scripts/** folder and may be pre-populated with intermediate results or sample outputs. 
 - An `/assets/` folder that contains any images used in the tutorials.
 - Any other files that might be relevant to the lab (additional markdowns, reading, references, related lab exercises, etc.) can be stored in **/other-materials/**.
 The [lab GitHub issue template](https://github.com/molevolworkshop/moledata/issues/new?template=update-lab.yml) is great for automatically uploading your materials while following these conventions
