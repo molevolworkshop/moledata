@@ -1,6 +1,6 @@
 name: "Lab Content Creation or Update"
 description: "Submit or update lab materials, data files, and instructions for the workshop."
-title: "Lab Update: [Lab Title or Topic]"
+title: "Lab Update: [Insert Lab Title or Topic here]"
 labels: ["lab-update", "needs-review"]
 body:
   - type: markdown
