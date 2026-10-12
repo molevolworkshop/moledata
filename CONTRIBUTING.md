@@ -12,8 +12,7 @@ We have GitHub issue templates for both [lecture](https://github.com/molevolwork
 Filling out these templates is recommended because it will automatically format the data, update metadata files as needed, and submit a Pull Request on your behalf. 
 If submitting a Pull Request directly, you will need to fork the [moledata repo](https://github.com/molevolworkshop/moledata) and ensure that your materials are appropriately formatted (see below).
 
- **Don't want to deal with GitHub?** Email your slides or lab files to the workshop
-> director and they'll add them for you.
+ **Don't want to deal with GitHub?** Email your slides or lab files to the workshop director and they'll add them for you.
 
 
 ## Materials registry
