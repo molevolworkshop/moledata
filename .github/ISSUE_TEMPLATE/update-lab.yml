@@ -21,6 +21,8 @@ body:
         Alternatively, if the file is already on GitHub, you can directly provide a link to the 'raw' file.
         For example, if you wanted to upload the R file contained here `https://github.com/trayc7/MidwestPhylo2019/blob/master/docs/class/diversification/1.general_diversification.R`, you would add a line in the text box like this `[myfile.R](https://raw.githubusercontent.com/trayc7/MidwestPhylo2019/refs/heads/master/docs/class/diversification/1.general_diversification.R)`.
 
+        * **File Sizes:** If using the using direct upload or drag and drop, only files of 25MB are accepted. Either compress files, upload them elsewhere and provide a direct download link (e.g., as above), or use git from the terminal to add the desired file to the PR created from this issue.
+  
   - type: dropdown
     id: lab_select
     attributes:
