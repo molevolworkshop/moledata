@@ -1,0 +1,4 @@
+stage,type,source
+paml-builder,file,/usr/local/bin/baseml
+paml-builder,file,/usr/local/bin/codeml
+paml-builder,file,/usr/local/bin/ds

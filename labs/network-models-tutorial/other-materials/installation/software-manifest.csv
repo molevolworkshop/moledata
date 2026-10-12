@@ -1,0 +1,5 @@
+stage,type,source
+julia-env,directory,/root/.julia
+julia-env,directory,/root/.juliaup
+julia-env,symlink,/root/.juliaup/bin/julia
+julia-env,symlink,/root/.juliaup/bin/juliaup

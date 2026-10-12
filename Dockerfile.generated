@@ -1,0 +1,54 @@
+# ==========================================
+# STAGE: base-tools
+# ==========================================
+FROM ubuntu:24.04 AS base-tools
+WORKDIR /build/base-tools
+COPY base-install.sh /tmp/base-install.sh
+RUN chmod +x /tmp/base-install.sh && /tmp/base-install.sh
+
+# ==========================================
+# STAGE: migrate_tutorial
+# ==========================================
+FROM base-tools AS migrate_tutorial
+WORKDIR /build/migrate_tutorial
+COPY labs/migrate_tutorial/other-files/installation /tmp/install-migrate_tutorial
+RUN chmod +x /tmp/install-migrate_tutorial/software-install.sh && /tmp/install-migrate_tutorial/software-install.sh
+
+# ==========================================
+# STAGE: network-models-tutorial
+# ==========================================
+FROM base-tools AS network-models-tutorial
+WORKDIR /build/network-models-tutorial
+COPY labs/network-models-tutorial/other-materials/installation /tmp/install-network-models-tutorial
+RUN chmod +x /tmp/install-network-models-tutorial/software-install.sh && /tmp/install-network-models-tutorial/software-install.sh
+
+# ==========================================
+# STAGE: paml_lab
+# ==========================================
+FROM base-tools AS paml_lab
+WORKDIR /build/paml_lab
+COPY labs/paml_lab/other-materials/installation /tmp/install-paml_lab
+RUN chmod +x /tmp/install-paml_lab/software-install.sh && /tmp/install-paml_lab/software-install.sh
+
+# ==========================================
+# STAGE: revbayes-gene-trees
+# ==========================================
+FROM base-tools AS revbayes-gene-trees
+WORKDIR /build/revbayes-gene-trees
+COPY labs/revbayes-gene-trees/other-materials/installation /tmp/install-revbayes-gene-trees
+RUN chmod +x /tmp/install-revbayes-gene-trees/software-install.sh && /tmp/install-revbayes-gene-trees/software-install.sh
+
+FROM base-tools AS final
+
+COPY --from=migrate_tutorial /usr/local/bin/migrate-n /usr/local/bin/
+COPY --from=network-models-tutorial /root/.julia /root/.julia
+COPY --from=network-models-tutorial /root/.juliaup /root/.juliaup
+RUN ln -s /root/.juliaup/bin/julia /usr/local/bin/julia
+RUN ln -s /root/.juliaup/bin/juliaup /usr/local/bin/juliaup
+COPY --from=paml_lab /usr/local/bin/baseml /usr/local/bin/
+COPY --from=paml_lab /usr/local/bin/codeml /usr/local/bin/
+COPY --from=paml_lab /usr/local/bin/ds /usr/local/bin/
+COPY --from=revbayes-gene-trees /usr/local/bin/rb /usr/local/bin/
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+WORKDIR /root
+CMD ["bash"]
