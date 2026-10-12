@@ -14,12 +14,3 @@ Before pushing changes, ensure Git LFS is installed and initialized on your syst
 git lfs install
 ```
 The [`.gitattributes`](.gitattributes) file specifies all file patterns managed by Git LFS.
-
-## Progress & Roadmap
-- [x] Metadata registry for lectures and labs (`_data/materials-registry.csv`)
-- [x] Automated GitHub Issue templates & workflows for lecture and lab submission
-- [x] Lab walkthroughs, datasets, and README documentation
-- [ ] Track traffic and download data
-- [ ] Publish archived release packages for each workshop year
-- [ ] Scraper / synchronization for off-site materials (Figshare, external GitHub repos)
-

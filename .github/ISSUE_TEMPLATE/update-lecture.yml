@@ -1,6 +1,6 @@
 name: Update Lecture Materials
 description: Submit or update a lecture title, README description, and supplementary files.
-title: "[Lecture Update]: "
+title: "Lecture Update: [insert descriptive name here]"
 labels: ["lecture-update", "needs-review"]
 body:
   - type: dropdown
@@ -88,22 +88,35 @@ body:
 
 
 
+
   - type: dropdown
     id: update_strategy
     attributes:
       label: Update Strategy
-      description: Choose whether to keep other existing files in the directory untouched or wipe them out and keep only the newly uploaded ones.
+      description: Choose whether to keep other existing files in the directory (updating any uploaded files only) or wipe all files out and keep only the newly uploaded ones.
       options:
         - Keep existing files (default)
         - Delete existing files and replace with new uploads only
     validations:
       required: true
 
+  - type: markdown
+    attributes:
+      value: |
+        ### File Attachments & Uploads
+
+        * **Unsupported Formats:** 
+        Please ensure any uploaded files through this issue template use a GitHub [accepted](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files) format. 
+        Alternatively, you can get around the restriction if the file is already on GitHub, you can directly provide a link to the 'raw' file.
+        For example, if you wanted to upload the R file contained here `https://github.com/trayc7/MidwestPhylo2019/blob/master/docs/class/diversification/1.general_diversification.R`, you would add a line in the text box like this `[myfile.R](https://raw.githubusercontent.com/trayc7/MidwestPhylo2019/refs/heads/master/docs/class/diversification/1.general_diversification.R)`.
+
+        * **File Sizes:** If using the using direct upload or drag and drop, only files of 25MB are accepted. Either compress files, upload them elsewhere and provide a direct download link (e.g., as above or uploading to dropbox/gogole drive), or use git from the terminal to add the desired file to the PR created from this issue.
+
   - type: textarea
     id: lecture_readme
     attributes:
-      label: Lecture README Content
-      description: Type or paste Markdown syntax directly, or drag-and-drop a pre-written README.md file into this box to automatically insert its contents or link.
+      label: Lecture README
+      description: This is an optional (but encouraged) README to include information about the lecture, learning objectives, additional readings, etc. In the future, this may be used as a landing page from the links in the schedule. For the time being, this page will not be linked to and only present in the directory itself.
       placeholder: |
         # Lecture Overview
         
@@ -115,7 +128,7 @@ body:
     id: lecture_presentation
     attributes:
       label: Lecture Presentation / Material
-      description: Drag and drop a presentation PDF directly into this box (stored on-site), OR paste a direct URL to an off-site material (e.g., Google Slides or external link).
+      description: Drag and drop a presentation PDF directly into this box (stored on-site), OR paste a direct URL to an off-site material (e.g., Google Slides or external link). If uploading a file, it always gets saved as `item_id`.pdf (see above).
       placeholder: "Drag and drop your PDF here or paste an off-site URL..."
     validations:
       required: false
@@ -124,7 +137,7 @@ body:
     id: lecture_files
     attributes:
       label: Additional Lecture Files & Attachments
-      description: Drag and drop supplementary files (code scripts, data archives, etc.) directly into this box. Supplementary files will be stored in the same directory as the lecture.
+      description: Drag and drop supplementary files (code scripts, data archives, etc.) directly into this box. Supplementary files will be stored in the same directory as the lecture. These files we be present on the site but no automatic links are made.
       placeholder: "Drag and drop your code, data, or other supplementary files here..."
     validations:
       required: false

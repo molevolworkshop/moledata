@@ -1,0 +1,14 @@
+- track traffic/download data
+   - write GH action for repo downloads/views from website
+   - convert goatcounter data to long format CSV
+- publish materials
+   - write  procedure for yearly releases and tags
+   - write GH action for automating release process
+- lab htmls and readme
+   - decide standard for style, directory structure, etc.
+   - convert old materials to new standard
+- write a scraper for lectures/labs not hosted on GH
+	- submodule for lectures hosted on GH but off site?
+	- figshare
+	- decide structure for pulling materials from off site 
+
