@@ -1,6 +1,6 @@
 name: "Lab Content Creation or Update"
 description: "Submit or update lab materials, data files, and instructions for the workshop."
-title: "Lab Update: [Lab Title or Topic]"
+title: "Lab Update: [Insert Lab Title or Topic here]"
 labels: ["lab-update", "needs-review"]
 body:
   - type: markdown
@@ -9,6 +9,8 @@ body:
         ### Lab Materials Update
         Use this form to add a new lab or update existing lab materials, code, or documentation. 
         An automated pull request will be generated upon submission.
+
+        **Note:** If the lab is hosted externally, you only need to provide a link to the lab that will appear on the schedule page of the site. Provide the link in the section "Master Lab Archive (.zip, .tar.gz) or External upload"
 
   - type: markdown
     attributes:
@@ -21,6 +23,8 @@ body:
         Alternatively, if the file is already on GitHub, you can directly provide a link to the 'raw' file.
         For example, if you wanted to upload the R file contained here `https://github.com/trayc7/MidwestPhylo2019/blob/master/docs/class/diversification/1.general_diversification.R`, you would add a line in the text box like this `[myfile.R](https://raw.githubusercontent.com/trayc7/MidwestPhylo2019/refs/heads/master/docs/class/diversification/1.general_diversification.R)`.
 
+        * **File Sizes:** If using the using direct upload or drag and drop, only files of 25MB are accepted. Either compress files, upload them elsewhere and provide a direct download link (e.g., as above), or use git from the terminal to add the desired file to the PR created from this issue.
+  
   - type: dropdown
     id: lab_select
     attributes:
@@ -90,27 +94,18 @@ body:
     id: update_strategy
     attributes:
       label: "Update Strategy"
-      description: "How should existing files in the target lab directory be handled?"
+      description: "How should existing files in the target lab directory be handled? Choose whether to keep other existing files in the directory (updating any uploaded files only) or wipe all files out and keep only the newly uploaded ones."
       options:
-        - "Keep existing files (default)"
+        - "Keep existing files and replace uploaded ones(default)"
         - "Delete existing files and replace completely"
-
-  - type: textarea
-    id: lab_readme
-    attributes:
-      label: "Lab README Content (Markdown)"
-      description: "The primary contents for the lab. This will be saved as README.md in the lab directory. You either upload a markdown file or populate the textbox directly"
-      placeholder: |
-        # Lab Overview
-        In this lab, we will explore network inference methods...
     validations:
-      required: false
+      required: true
 
   - type: textarea
     id: master_archive
     attributes:
-      label: "Master Lab Archive (.zip, .tar.gz)"
-      description: "Optionally drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If lab materials are uploaded this way, you may leave the following prompts blank"
+      label: "Master Lab Archive (.zip, .tar.gz) or External upload"
+      description: "Drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If you want your lab materials hosted off the site then provide a link to the materials here If lab materials are uploaded this way, you may leave the following prompts blank"
       placeholder: "Drag and drop a master .zip archive here..."
     validations:
       required: false
@@ -120,7 +115,17 @@ body:
       value: |
         ### Individual Folder uploads
         Only upload contents here if you did not upload a zipped archive to the "Master Lab Archive"
-
+        
+  - type: textarea
+    id: lab_readme
+    attributes:
+      label: "Lab Content (Markdown)"
+      description: "The primary contents for the lab. This will be saved as README.md in the lab directory and will appear as the linked file in the schedule. You either upload a markdown file or populate the textbox directly"
+      placeholder: |
+        # Lab Overview
+        In this lab, we will explore network inference methods...
+    validations:
+      required: false
 
   - type: textarea
     id: lab_scripts

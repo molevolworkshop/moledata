@@ -1,9 +1,10 @@
 name: Compress PDFs in PR
-
+ 
 on:
-  push:
+  pull_request:
     paths:
       - '**/*.pdf'
+  workflow_dispatch:
 
 jobs:
   compress-pdfs:
@@ -38,7 +39,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git fetch origin ${GITHUB_BASE_REF}
+          git fetch origin ${{ github.base_ref }}
 
           PDF_FILES=$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep '\.pdf$' || true)
 

@@ -8,14 +8,16 @@ Pages limit made that unwieldy for large data sets, so they moved here.)_
 
 | Lab | Folder | Contributed by |
 |---|---|---|
+| Computer introduction | `intro_computer/` | TAs |
+| Sequence alignment | `alignment-lab/` | George Tiley |
 | IQ-TREE | `iqtree_lab/` | Minh Bui |
 | Model selection (PAUP*) | `modsel_sim_tutorial/` | David Swofford |
 | PhyloNetworks (MrBayes data) | `mrbayes/` | Claudia Solís-Lemus |
-| Multiple sequence alignment | `msa_lab/` | George Tiley |
 | PAML | `paml_lab/` | Joe Bielawski |
 | RevBayes | `revbayes/` | see note below |
 | Migrate | `migrate_tutorial/` | Peter Beerli |
 | SVDQuartets | `svdquartets_tutorial/` | Laura Kubatko & David Swofford |
+| Machine learning | `machine_learning/` | Megan Smith |
 
 **RevBayes:** `revbayes/genetree/` holds files for the
 [Nucleotide substitution models](https://revbayes.github.io/tutorials/ctmc/) tutorial
