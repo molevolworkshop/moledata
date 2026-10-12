@@ -116,7 +116,7 @@ body:
     id: lecture_readme
     attributes:
       label: Lecture README
-      description: This is a README to include information about the lecture, learning objectives, additional readings, etc. In the future, this may be used as a landing page from the links in the schedule. For the time being, this page will not be linked to and only present in the directory itself.
+      description: This is an optional (but encouraged) README to include information about the lecture, learning objectives, additional readings, etc. In the future, this may be used as a landing page from the links in the schedule. For the time being, this page will not be linked to and only present in the directory itself.
       placeholder: |
         # Lecture Overview
         
