@@ -94,9 +94,9 @@ body:
     id: update_strategy
     attributes:
       label: "Update Strategy"
-      description: "How should existing files in the target lab directory be handled?"
+      description: "How should existing files in the target lab directory be handled? Choose whether to keep other existing files in the directory (updating any uploaded files only) or wipe all files out and keep only the newly uploaded ones."
       options:
-        - "Keep existing files (default)"
+        - "Keep existing files and replace uploaded ones(default)"
         - "Delete existing files and replace completely"
     validations:
       required: true
