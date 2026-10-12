@@ -1,5 +1,5 @@
 name: "Lab Content Creation or Update"
-description: "Submit or update lab materials, data files, and instructions for the workshop. **Note:** If the lab is hosted externally, you only need to provide a link to the lab that will appear on the schedule page of the site. Provide the link in the section 'Master Lab Archive (.zip, .tar.gz) or External upload'"
+description: "Submit or update lab materials, data files, and instructions for the workshop."
 title: "Lab Update: [Lab Title or Topic]"
 labels: ["lab-update", "needs-review"]
 body:
@@ -9,6 +9,8 @@ body:
         ### Lab Materials Update
         Use this form to add a new lab or update existing lab materials, code, or documentation. 
         An automated pull request will be generated upon submission.
+
+        **Note:** If the lab is hosted externally, you only need to provide a link to the lab that will appear on the schedule page of the site. Provide the link in the section "Master Lab Archive (.zip, .tar.gz) or External upload"
 
   - type: markdown
     attributes:
