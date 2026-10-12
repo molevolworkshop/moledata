@@ -20,7 +20,7 @@ If submitting a Pull Request directly, you will need to fork the [moledata repo]
 We keep a registry of the current labs and lectures in [materials-registry.csv](https://github.com/molevolworkshop/moledata/blob/main/_data/materials-registry.csv).
 Find or add the relevant lab/lecture for your materials. The element in the `item_id` column will be name of the folder containing your materials and will be how the website paths to and locates certain materials. 
 The specific location of the materials depend on whether it is designated as a `lab` or `lecture`. For example, the materials corresponding to the IQ-Tree lab (with `item_id` `iqtree-lab`) are stored in `moledata/labs/iqtree-lab`.
-If lab or lecture materials are stored off-site (e.g., on Figshare or a personal github), you should update the `material_location` in the `materials-registry.csv` with a link to the specific materials.*
+**IMPORTANT** If lab or lecture materials are stored off-site (e.g., on Figshare or a personal github), you should update the `material_location` in the `materials-registry.csv` with a link to the specific materials.
 If the materials are stored on-site and in the appropriate location, you should leave `material_location` blank as the site will parse this location automatically. 
 
 ## Materials formatting 
