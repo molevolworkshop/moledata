@@ -95,16 +95,7 @@ body:
         - "Keep existing files (default)"
         - "Delete existing files and replace completely"
 
-  - type: textarea
-    id: lab_readme
-    attributes:
-      label: "Lab README Content (Markdown)"
-      description: "The primary contents for the lab. This will be saved as README.md in the lab directory. You either upload a markdown file or populate the textbox directly"
-      placeholder: |
-        # Lab Overview
-        In this lab, we will explore network inference methods...
-    validations:
-      required: false
+
 
   - type: textarea
     id: master_archive
@@ -120,7 +111,17 @@ body:
       value: |
         ### Individual Folder uploads
         Only upload contents here if you did not upload a zipped archive to the "Master Lab Archive"
-
+        
+  - type: textarea
+    id: lab_readme
+    attributes:
+      label: "Lab Content (Markdown)"
+      description: "The primary contents for the lab. This will be saved as README.md in the lab directory and will appear as the linked file in the schedule. You either upload a markdown file or populate the textbox directly"
+      placeholder: |
+        # Lab Overview
+        In this lab, we will explore network inference methods...
+    validations:
+      required: false
 
   - type: textarea
     id: lab_scripts
