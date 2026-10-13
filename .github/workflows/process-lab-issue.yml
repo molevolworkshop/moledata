@@ -76,14 +76,14 @@ jobs:
             const labTitleInput = getFieldValue('Lab Title');
             const rawLecturer = getFieldValue('Responsible Faculty / Author');
             const updateStrategy = getFieldValue('Update Strategy');
-            const readmeContent = getFieldValue('Lab README Content (Markdown)');
+            const tutorialType = getFieldValue('Tutorial page');
+            const readmeContent = getFieldValue('Lab Content');
             const masterArchiveField = getFieldValue('Master Lab Archive (.zip, .tar.gz)');
             const scriptsField = getFieldValue('Scripts & Code Files');
             const dataField = getFieldValue('Datasets & Input Files');
             const outputsField = getFieldValue('Output Files & Expected Results');
             const assetsField = getFieldValue('Assets and Images');
             const additionalFilesField = getFieldValue('Other Materials & Attachments');
-            
 
             // --- Extract Author ID/Name ---
             let lecturer = '';
@@ -152,15 +152,12 @@ jobs:
             }
 
             // --- Handle Update Strategy ---
-            console.log("Raw Update Strategy:", JSON.stringify(updateStrategy));
             const shouldClear = updateStrategy.includes('Delete existing files');
-
             if (shouldClear && fs.existsSync(labDir)) {
               console.log(`Removing entire directory ${labDir}...`);
               fs.rmSync(labDir, { recursive: true, force: true });
             }
 
-            // Recreate the directory fresh
             if (!fs.existsSync(labDir)) {
               fs.mkdirSync(labDir, { recursive: true });
             }
@@ -184,6 +181,30 @@ jobs:
               fs.writeFileSync(outputPath, buffer);
             };
 
+            // --- Handle Tutorial Type (Onsite vs Offsite URL) ---
+            let matLoc = '';
+            const isOffsite = tutorialType.includes('externally hosted');
+
+            if (isOffsite) {
+              matLoc = readmeContent.trim();
+              console.log(`Offsite tutorial link set to: ${matLoc}`);
+            } else {
+              matLoc = ''; // Clear offsite location since it's hosted on-site
+              if (readmeContent) {
+                const readmeFiles = extractUrls(readmeContent);
+                const readmePath = path.join(labDir, 'README.md');
+
+                if (readmeFiles.length > 0) {
+                  const fileObj = readmeFiles[0];
+                  console.log(`Downloading uploaded README file from ${fileObj.url}...`);
+                  await downloadFile(fileObj.url, readmePath);
+                } else {
+                  fs.writeFileSync(readmePath, readmeContent, 'utf8');
+                  console.log(`Saved typed README text for ${newSlug}`);
+                }
+              }
+            }
+
             // --- Handle Master Archive (.zip / .tar.gz) ---
             const masterFiles = extractUrls(masterArchiveField);
             if (masterFiles.length > 0) {
@@ -203,7 +224,6 @@ jobs:
               }
             }
 
-
             // --- Unified Helper for Field Processing (Files or Archives) ---
             const processFieldFiles = async (fieldValue, targetSubDir) => {
               const files = extractUrls(fieldValue);
@@ -215,15 +235,14 @@ jobs:
                 const ext = path.extname(fileObj.name).toLowerCase();
                 const isArchive = ext === '.zip' || fileObj.name.endsWith('.tar.gz') || ext === '.tgz';
 
+                if (!fs.existsSync(subDirPath)) {
+                  fs.mkdirSync(subDirPath, { recursive: true });
+                }
+
                 if (isArchive) {
-                  // If it's a zipped/tarred archive, extract its contents directly into the target directory
-                  if (!fs.existsSync(subDirPath)) {
-                    fs.mkdirSync(subDirPath, { recursive: true });
-                  }
                   const tempArchivePath = path.join(process.cwd(), `temp_${targetSubDir || 'root'}_${Date.now()}${ext}`);
                   console.log(`Downloading archive for ${targetSubDir || 'root'} from ${fileObj.url}...`);
                   await downloadFile(fileObj.url, tempArchivePath);
-                  console.log(`Extracting archive into ${subDirPath}...`);
                   try {
                     if (fileObj.name.endsWith('.zip')) {
                       execSync(`unzip -o "${tempArchivePath}" -d "${subDirPath}"`);
@@ -234,10 +253,6 @@ jobs:
                     if (fs.existsSync(tempArchivePath)) fs.unlinkSync(tempArchivePath);
                   }
                 } else {
-                  // Regular individual file upload
-                  if (!fs.existsSync(subDirPath)) {
-                    fs.mkdirSync(subDirPath, { recursive: true });
-                  }
                   const targetPath = path.join(subDirPath, fileObj.name);
                   console.log(`Downloading file to ${targetPath}...`);
                   await downloadFile(fileObj.url, targetPath);
@@ -249,29 +264,8 @@ jobs:
             await processFieldFiles(scriptsField, 'scripts');
             await processFieldFiles(dataField, 'data');
             await processFieldFiles(outputsField, 'outputs');
-            await processFieldFiles(outputsField, outputSubDir);
             await processFieldFiles(assetsField, 'assets');
             await processFieldFiles(additionalFilesField, 'other-materials');
-
-
-
-            // --- Write or Download README.md ---
-            if (readmeContent) {
-              const readmeFiles = extractUrls(readmeContent);
-              const readmePath = path.join(labDir, 'README.md');
-
-              if (readmeFiles.length > 0) {
-                // Case A: A file was uploaded/dragged into the README field
-                const fileObj = readmeFiles[0];
-                console.log(`Downloading uploaded README file from ${fileObj.url}...`);
-                await downloadFile(fileObj.url, readmePath);
-                console.log(`Saved uploaded file as README.md for ${newSlug}`);
-              } else {
-                // Case B: Plain text or markdown was typed/pasted directly into the box
-                fs.writeFileSync(readmePath, readmeContent, 'utf8');
-                console.log(`Saved typed README text for ${newSlug}`);
-              }
-            }
 
             // --- Update or Create _data/materials-registry.csv ---
             const dataDir = path.join(process.cwd(), '_data');
@@ -314,7 +308,7 @@ jobs:
               category: 'lab',
               title: labTitle,
               presenter: lecturer,
-              material_location: ''
+              material_location: matLoc
             };
 
             updatedRows = updatedRows.map(row => {
@@ -344,7 +338,6 @@ jobs:
             core.exportVariable('LAB_SLUG', newSlug);
             core.exportVariable('LAB_TITLE', labTitle);
 
-      
       - name: Push Branch and Create/Update Pull Request
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -358,7 +351,6 @@ jobs:
           
           git push origin "update-lab/${{ env.LAB_SLUG }}" --force
           
-          # Check if an open PR already exists for this branch
           EXISTING_PR=$(gh pr list --head "update-lab/${{ env.LAB_SLUG }}" --state open --json number --jq '.[0].number')
           
           if [ -z "$EXISTING_PR" ]; then
