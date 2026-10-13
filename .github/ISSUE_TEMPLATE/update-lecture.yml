@@ -3,6 +3,14 @@ description: Submit or update a lecture title, README description, and supplemen
 title: "Lecture Update: [insert descriptive name here]"
 labels: ["lecture-update", "needs-review"]
 body:
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Lecture Materials Update
+        Use this form to add a new lecture or update existing lecture materials. 
+        An automated pull request will be generated upon submission.
+
   - type: dropdown
     id: select_lecture
     attributes:
@@ -123,6 +131,36 @@ body:
         Write your notes, objectives, or markdown description here, or drag and drop a README.md file...
     validations:
       required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Lab Tutorial 
+        Here you can upload the actual tutorial itself. You have two options for where the tutorial lives:
+        ### in `moledata` 
+        Here you can select to upload the tutorial itself (ideally as a markdown file).
+        If a markdown, we will convert it into an html on the website with a nice uniform layout for traversing all the tutorial contents.
+        The file will be saved as README.md in the lab directory.
+        
+        If you select this option, in following textbox you should either input the tutorial text directly or upload a markdown file with the contents of the lab.
+        
+        ### hosted offsite 
+        If you prefer that the presentation itself is hosted off-site (e.g., a personal repo, on Figshare, etc.), you may select this option.
+        For ease of archiving, reproducibility, computing interactions, and standardization, we do not recommend this option.
+        
+        If you select this option, in the following textbox you should input the link to the presentation.
+
+  - type: dropdown
+    id: lecture_type
+    attributes:
+      label: "Lecture Location"
+      description: "Where is the primary presentation going to live?"
+      options:
+        - "I want to upload it to the MOLE site"
+        - "It is externally hosted and I will provide a link to the presentation"
+    validations:
+      required: true
+
 
   - type: textarea
     id: lecture_presentation

@@ -100,12 +100,62 @@ body:
         - "Delete existing files and replace completely"
     validations:
       required: true
+      
+      
+      
+  - type: markdown
+    attributes:
+      value: |
+        ## Lab Tutorial 
+        Here you can upload the actual tutorial itself. You have two options for where the tutorial lives:
+        ### in `moledata` 
+        Here you can select to upload the tutorial itself (ideally as a markdown file).
+        If a markdown, we will convert it into an html on the website with a nice uniform layout for traversing all the tutorial contents.
+        The file will be saved as README.md in the lab directory.
+        
+        If you select this option, in following textbox you should either input the tutorial text directly or upload a markdown file with the contents of the lab.
+        
+        ### hosted offsite 
+        If you prefer that the tutorial itself is hosted off-site (e.g., a personal repo, on a specific software's website, etc.), you may select this option.
+        For ease of archiving, reproducibility, computing interactions, and standardization, we do not recommend this option.
+        
+        If you select this option, in the following textbox you should input the link to the tutorial page.
+
+  - type: dropdown
+    id: tutorial_type
+    attributes:
+      label: "Tutorial page"
+      description: "Where is the primary tutorial text going to live?"
+      options:
+        - "I want to upload it to the MOLE site"
+        - "It is externally hosted and I will provide a link to the materials"
+    validations:
+      required: true
+
+  - type: textarea
+    id: lab_readme
+    attributes:
+      label: "Lab Content"
+      description: "The primary contents for the lab. Either upload a markdown file (or directly input the text) if storing onsite or provide a link if using an offsite tutorial."
+      placeholder: |
+        # Lab Overview
+        In this lab, we will explore network inference methods...
+    validations:
+      required: false
+
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Tutorial Materials
+        In the following prompts you will upload all nessecary data, scripts, and files that students will use in the labs. These are the materials that will appear on student machines.
+
 
   - type: textarea
     id: master_archive
     attributes:
-      label: "Master Lab Archive (.zip, .tar.gz) or External upload"
-      description: "Drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If you want your lab materials hosted off the site then provide a link to the materials here If lab materials are uploaded this way, you may leave the following prompts blank"
+      label: "Master Lab Archive (.zip, .tar.gz)"
+      description: "Drop a single compressed archive containing your structured folders (scripts/, data/, outputs/, etc.). This will unpack directly into the lab directory. If lab materials are uploaded this way, you may leave the following prompts for individual folders blank"
       placeholder: "Drag and drop a master .zip archive here..."
     validations:
       required: false
@@ -116,16 +166,6 @@ body:
         ### Individual Folder uploads
         Only upload contents here if you did not upload a zipped archive to the "Master Lab Archive"
         
-  - type: textarea
-    id: lab_readme
-    attributes:
-      label: "Lab Content (Markdown)"
-      description: "The primary contents for the lab. This will be saved as README.md in the lab directory and will appear as the linked file in the schedule. You either upload a markdown file or populate the textbox directly"
-      placeholder: |
-        # Lab Overview
-        In this lab, we will explore network inference methods...
-    validations:
-      required: false
 
   - type: textarea
     id: lab_scripts
